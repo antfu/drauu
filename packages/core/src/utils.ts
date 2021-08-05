@@ -1,3 +1,3 @@
-export function nicerDecimal(d: number) {
+export function decimal(d: number) {
   return Math.floor(d * 100) / 100
 }

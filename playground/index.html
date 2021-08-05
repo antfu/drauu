@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Drauu</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <div id="app" class="w-screen h-screen">
-    <svg id="svg" class="w-full h-full"></svg>
+  <div id="app" class="w-screen h-screen flex flex-col">
+    <div class="p-3 border-b border-gray-200 flex gap-4">
+      <div class="overflow-hidden relative w-10 h-10 rounded-full border border-gray-300">
+        <input id="color" type="color" value="#000000" class="w-20 h-20 -m-5" />
+      </div>
+      <h1 class="align-middle my-auto text-xl font-serif opacity-50">
+        Drauu
+      </h1>
+    </div>
+    <svg id="svg" class="w-full flex-auto"></svg>
   </div>
   <script type="module" src="./main.ts"></script>
 </body>

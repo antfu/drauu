@@ -1,10 +1,6 @@
-export interface DrauuOptions {
-  el?: string | SVGSVGElement
-}
-
-export interface DrauuPen {
+export interface Brush {
   color: string
-  width: number
+  size: number
   /**
    * @default 4
    */
@@ -14,4 +10,12 @@ export interface DrauuPen {
 export interface Point {
   x: number
   y: number
+}
+
+export type DrawingMode = 'draw' | 'line'
+
+export interface Options {
+  el?: string | SVGSVGElement
+  brush?: Brush
+  mode?: DrawingMode
 }

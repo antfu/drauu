@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Drauu } from '../index'
+import { Drauu } from '../drauu'
 import { Point } from '../types'
 
-export class DrauuBaseModel {
-  lastEvent: MouseEvent | TouchEvent | undefined
-  points: Point[] = []
+export abstract class BaseModel {
+  protected event: MouseEvent | TouchEvent = undefined!
+  protected point: Point = undefined!
 
   constructor(private drauu: Drauu) {
   }
 
-  get pen() {
-    return this.drauu.pen
+  get brush() {
+    return this.drauu.brush
   }
 
-  onStart(event: MouseEvent | TouchEvent, lastPoints: Point[]): SVGElement | undefined {
+  onStart(point: Point): SVGElement | undefined {
     return undefined
   }
 
-  onMove(event: MouseEvent | TouchEvent) {
-
+  onMove(point: Point): boolean {
+    return false
   }
 
-  onEnd(event: MouseEvent | TouchEvent, points: Point[]): SVGElement | boolean | undefined {
+  onEnd(point: Point): SVGElement | boolean | undefined {
     return undefined
   }
 
@@ -34,20 +34,33 @@ export class DrauuBaseModel {
     throw new Error('unsupported event type')
   }
 
+  protected createElement<K extends keyof SVGElementTagNameMap>(name: K): SVGElementTagNameMap[K] {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', name)
+    el.setAttribute('fill', 'transparent')
+    el.setAttribute('stroke', this.brush.color)
+    el.setAttribute('stroke-width', this.brush.size.toString())
+    el.setAttribute('stroke-linecap', 'round')
+
+    return el
+  }
+
+  private _setEvent(event: MouseEvent | TouchEvent) {
+    this.event = event
+    this.point = this.getMousePosition(event)
+  }
+
   _eventDown(event: MouseEvent | TouchEvent) {
-    const lastPoints = this.points
-    this.points = []
-    this.lastEvent = event
-    return this.onStart(event, lastPoints)
+    this._setEvent(event)
+    return this.onStart(this.point)
   }
 
   _eventMove(event: MouseEvent | TouchEvent) {
-    this.lastEvent = event
-    return this.onMove(event)
+    this._setEvent(event)
+    return this.onMove(this.point)
   }
 
   _eventUp(event: MouseEvent | TouchEvent) {
-    this.lastEvent = event
-    return this.onEnd(event, this.points)
+    this._setEvent(event)
+    return this.onEnd(this.point)
   }
 }

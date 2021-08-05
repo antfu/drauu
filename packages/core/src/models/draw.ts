@@ -1,34 +1,29 @@
 import { Point } from '../types'
-import { nicerDecimal } from '../utils'
-import { DrauuBaseModel } from './base'
+import { decimal } from '../utils'
+import { BaseModel } from './base'
 
-export class DrauuDrawModel extends DrauuBaseModel {
+export class DrawModel extends BaseModel {
   private smoothBuffer: Point[] = []
   private path: SVGPathElement | null = null
   private strPath = ''
 
-  override onStart(event: MouseEvent | TouchEvent) {
-    this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    this.path.setAttribute('fill', 'transparent')
-    this.path.setAttribute('stroke', this.pen.color)
-    this.path.setAttribute('stroke-width', this.pen.width.toString())
-    this.path.setAttribute('stroke-linecap', 'round')
+  override onStart(point: Point) {
+    this.path = this.createElement('path')
     this.smoothBuffer = []
-    const pt = this.getMousePosition(event)
-    this.appendToBuffer(pt)
-    this.strPath = `M${nicerDecimal(pt.x)} ${nicerDecimal(pt.y)}`
+    this.appendToBuffer(point)
+    this.strPath = `M${decimal(point.x)} ${decimal(point.y)}`
     this.path.setAttribute('d', this.strPath)
 
     return this.path
   }
 
-  override onMove(event: MouseEvent | TouchEvent) {
-    if (this.path) {
-      event.stopPropagation()
-      event.preventDefault()
-      this.appendToBuffer(this.getMousePosition(event))
-      this.updateSvgPath()
-    }
+  override onMove(point: Point) {
+    if (!this.path)
+      return false
+
+    this.appendToBuffer(point)
+    this.updateSvgPath()
+    return true
   }
 
   override onEnd() {
@@ -39,11 +34,12 @@ export class DrauuDrawModel extends DrauuBaseModel {
       return false
     if (!path.getTotalLength())
       return false
+
     return true
   }
 
   get smoothness() {
-    return this.pen.smoothness ?? 4
+    return this.brush.smoothness ?? 4
   }
 
   appendToBuffer(point: Point) {
@@ -58,14 +54,14 @@ export class DrauuDrawModel extends DrauuBaseModel {
       return
 
     // Get the smoothed part of the path that will not change
-    this.strPath += ` L${nicerDecimal(pt.x)} ${nicerDecimal(pt.y)}`
+    this.strPath += ` L${decimal(pt.x)} ${decimal(pt.y)}`
     // Get the last part of the path (close to the current mouse position)
     // This part will change if the mouse moves again
     let tmpPath = ''
     for (let offset = 2; offset < this.smoothBuffer.length; offset += 2) {
       pt = this.getAveragePoint(offset)
       if (pt)
-        tmpPath += ` L${nicerDecimal(pt.x)} ${nicerDecimal(pt.y)}`
+        tmpPath += ` L${decimal(pt.x)} ${decimal(pt.y)}`
     }
     // Set the complete current path coordinates
     this.path!.setAttribute('d', this.strPath + tmpPath)

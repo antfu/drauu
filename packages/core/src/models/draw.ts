@@ -2,23 +2,22 @@ import { Point } from '../types'
 import { decimal } from '../utils'
 import { BaseModel } from './base'
 
-export class DrawModel extends BaseModel {
+export class DrawModel extends BaseModel<SVGPathElement> {
   private smoothBuffer: Point[] = []
-  private path: SVGPathElement | null = null
   private strPath = ''
 
   override onStart(point: Point) {
-    this.path = this.createElement('path')
+    this.el = this.createElement('path')
     this.smoothBuffer = []
     this.appendToBuffer(point)
     this.strPath = `M${decimal(point.x)} ${decimal(point.y)}`
-    this.path.setAttribute('d', this.strPath)
+    this.attr('d' as any, this.strPath)
 
-    return this.path
+    return this.el
   }
 
   override onMove(point: Point) {
-    if (!this.path)
+    if (!this.el)
       return false
 
     this.appendToBuffer(point)
@@ -27,8 +26,8 @@ export class DrawModel extends BaseModel {
   }
 
   override onEnd() {
-    const path = this.path
-    this.path = null
+    const path = this.el
+    this.el = null
 
     if (!path)
       return false
@@ -64,7 +63,7 @@ export class DrawModel extends BaseModel {
         tmpPath += ` L${decimal(pt.x)} ${decimal(pt.y)}`
     }
     // Set the complete current path coordinates
-    this.path!.setAttribute('d', this.strPath + tmpPath)
+    this.el!.setAttribute('d', this.strPath + tmpPath)
   }
 
   // Calculate the average point, starting at offset in the buffer

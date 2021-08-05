@@ -1,33 +1,31 @@
 import { Point } from '../types'
 import { BaseModel } from './base'
 
-export class LineModel extends BaseModel {
-  private line: SVGLineElement | null = null
-
+export class LineModel extends BaseModel<SVGLineElement> {
   override onStart(point: Point) {
-    this.line = this.createElement('line')
+    this.el = this.createElement('line')
 
-    this.line.setAttribute('x1', point.x.toString())
-    this.line.setAttribute('y1', point.y.toString())
-    this.line.setAttribute('x2', point.x.toString())
-    this.line.setAttribute('y2', point.y.toString())
+    this.attr('x1', point.x)
+    this.attr('y1', point.y)
+    this.attr('x2', point.x)
+    this.attr('y2', point.y)
 
-    return this.line
+    return this.el
   }
 
   override onMove(point: Point) {
-    if (!this.line)
+    if (!this.el)
       return false
 
-    this.line.setAttribute('x2', point.x.toString())
-    this.line.setAttribute('y2', point.y.toString())
+    this.attr('x2', point.x)
+    this.attr('y2', point.y)
 
     return true
   }
 
   override onEnd() {
-    const path = this.line
-    this.line = null
+    const path = this.el
+    this.el = null
 
     if (!path)
       return false

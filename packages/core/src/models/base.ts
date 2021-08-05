@@ -2,9 +2,11 @@
 import { Drauu } from '../drauu'
 import { Point } from '../types'
 
-export abstract class BaseModel {
+export abstract class BaseModel<T extends SVGElement> {
   event: MouseEvent | TouchEvent = undefined!
   point: Point = undefined!
+  start: Point | null = null
+  el: T | null = null
 
   constructor(private drauu: Drauu) {
   }
@@ -48,6 +50,10 @@ export abstract class BaseModel {
     return el
   }
 
+  protected attr(name: keyof T, value: string | number) {
+    this.el!.setAttribute(name as string, value.toString())
+  }
+
   private _setEvent(event: MouseEvent | TouchEvent) {
     this.event = event
     this.point = this.getMousePosition(event)
@@ -58,6 +64,7 @@ export abstract class BaseModel {
    */
   _eventDown(event: MouseEvent | TouchEvent) {
     this._setEvent(event)
+    this.start = this.point
     return this.onStart(this.point)
   }
 

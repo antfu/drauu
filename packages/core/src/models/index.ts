@@ -7,7 +7,7 @@ import { EllipseModel } from './ellipse'
 import { LineModel } from './line'
 import { RectModel } from './rect'
 
-export function createModels(drauu: Drauu): Record<DrawingMode, BaseModel> {
+export function createModels(drauu: Drauu): Record<DrawingMode, BaseModel<SVGElement>> {
   return {
     draw: new DrawModel(drauu),
     line: new LineModel(drauu),

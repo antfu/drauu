@@ -2,32 +2,27 @@ import { Point } from '../types'
 import { numSort } from '../utils'
 import { BaseModel } from './base'
 
-export class RectModel extends BaseModel {
-  private rect: SVGRectElement | null = null
-  private startPoint: Point | null = null
-
+export class RectModel extends BaseModel<SVGRectElement> {
   override onStart(point: Point) {
-    this.rect = this.createElement('rect')
-
-    this.startPoint = point
+    this.el = this.createElement('rect')
 
     if (this.brush.rectangle?.radius) {
-      this.rect.setAttribute('rx', this.brush.rectangle.radius.toString())
-      this.rect.setAttribute('ry', this.brush.rectangle.radius.toString())
+      this.attr('rx', this.brush.rectangle.radius)
+      this.attr('ry', this.brush.rectangle.radius)
     }
 
-    this.rect.setAttribute('x', point.x.toString())
-    this.rect.setAttribute('y', point.y.toString())
+    this.attr('x', point.x)
+    this.attr('y', point.y)
 
-    return this.rect
+    return this.el
   }
 
   override onMove(point: Point) {
-    if (!this.rect || !this.startPoint)
+    if (!this.el || !this.start)
       return false
 
-    const [x1, x2] = [this.startPoint.x, point.x].sort(numSort)
-    const [y1, y2] = [this.startPoint.y, point.y].sort(numSort)
+    const [x1, x2] = [this.start.x, point.x].sort(numSort)
+    const [y1, y2] = [this.start.y, point.y].sort(numSort)
 
     let dx = x2 - x1
     let dy = y2 - y1
@@ -38,18 +33,18 @@ export class RectModel extends BaseModel {
       dy = d
     }
 
-    this.rect.setAttribute('x', x1.toString())
-    this.rect.setAttribute('y', y1.toString())
-    this.rect.setAttribute('width', dx.toString())
-    this.rect.setAttribute('height', dy.toString())
+    this.attr('x', x1)
+    this.attr('y', y1)
+    this.attr('width', dx)
+    this.attr('height', dy)
 
     return true
   }
 
   override onEnd() {
-    const path = this.rect
-    this.startPoint = null
-    this.rect = null
+    const path = this.el
+    this.start = null
+    this.el = null
 
     if (!path)
       return false

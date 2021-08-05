@@ -1,27 +1,22 @@
 import { Point } from '../types'
 import { BaseModel } from './base'
 
-export class EllipseModel extends BaseModel {
-  private ellipse: SVGEllipseElement | null = null
-  private startPoint: Point | null = null
-
+export class EllipseModel extends BaseModel<SVGEllipseElement> {
   override onStart(point: Point) {
-    this.ellipse = this.createElement('ellipse')
+    this.el = this.createElement('ellipse')
 
-    this.startPoint = point
+    this.attr('cx', point.x)
+    this.attr('cy', point.y)
 
-    this.ellipse.setAttribute('cx', point.x.toString())
-    this.ellipse.setAttribute('cy', point.y.toString())
-
-    return this.ellipse
+    return this.el
   }
 
   override onMove(point: Point) {
-    if (!this.ellipse || !this.startPoint)
+    if (!this.el || !this.start)
       return false
 
-    let dx = Math.abs(point.x - this.startPoint.x)
-    let dy = Math.abs(point.y - this.startPoint.y)
+    let dx = Math.abs(point.x - this.start.x)
+    let dy = Math.abs(point.y - this.start.y)
 
     if (this.shiftPressed) {
       const d = Math.min(dx, dy)
@@ -29,16 +24,16 @@ export class EllipseModel extends BaseModel {
       dy = d
     }
 
-    this.ellipse.setAttribute('rx', dx.toString())
-    this.ellipse.setAttribute('ry', dy.toString())
+    this.attr('rx', dx)
+    this.attr('ry', dy)
 
     return true
   }
 
   override onEnd() {
-    const path = this.ellipse
-    this.startPoint = null
-    this.ellipse = null
+    const path = this.el
+    this.start = null
+    this.el = null
 
     if (!path)
       return false

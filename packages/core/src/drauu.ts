@@ -5,10 +5,12 @@ export class Drauu {
   el: SVGSVGElement | null = null
   mode: DrawingMode
   brush: Brush
+  shiftPressed = false
 
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
   private _undoStack: Node[] = []
+  private _disposables: (() => void)[] = []
 
   constructor(public options: Options = {}) {
     this.brush = options.brush || { color: 'black', size: 2 }
@@ -24,7 +26,6 @@ export class Drauu {
   mount(selector: string | SVGSVGElement) {
     if (typeof selector === 'string')
       this.el = document.querySelector(selector)
-
     else
       this.el = selector
 
@@ -33,16 +34,37 @@ export class Drauu {
     if (this.el.tagName !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
 
-    this.el.addEventListener('mousedown', this.eventDown.bind(this), false)
-    this.el.addEventListener('touchstart', this.eventDown.bind(this), false)
-    this.el.addEventListener('mousemove', this.eventMove.bind(this), false)
-    this.el.addEventListener('touchmove', this.eventMove.bind(this), false)
-    this.el.addEventListener('mouseup', this.eventUp.bind(this), false)
-    this.el.addEventListener('touchend', this.eventUp.bind(this), false)
+    const el = this.el
+
+    const start = this.eventStart.bind(this)
+    const move = this.eventMove.bind(this)
+    const end = this.eventEnd.bind(this)
+    const keyboard = this.eventKeyboard.bind(this)
+
+    el.addEventListener('mousedown', start, false)
+    el.addEventListener('touchstart', start, false)
+    el.addEventListener('mousemove', move, false)
+    el.addEventListener('touchmove', move, false)
+    el.addEventListener('mouseup', end, false)
+    el.addEventListener('touchend', end, false)
+    window.addEventListener('keydown', keyboard, false)
+    window.addEventListener('keyup', keyboard, false)
+
+    this._disposables.push(() => {
+      el.removeEventListener('mousedown', start, false)
+      el.removeEventListener('touchstart', start, false)
+      el.removeEventListener('mousemove', move, false)
+      el.removeEventListener('touchmove', move, false)
+      el.removeEventListener('mouseup', end, false)
+      el.removeEventListener('touchend', end, false)
+      window.removeEventListener('keydown', keyboard, false)
+      window.removeEventListener('keyup', keyboard, false)
+    })
   }
 
   unmounted() {
-    // TODO:
+    this._disposables.forEach(fn => fn())
+    this._disposables.length = 0
   }
 
   undo() {
@@ -68,7 +90,7 @@ export class Drauu {
     }
   }
 
-  private eventDown(event: MouseEvent | TouchEvent) {
+  private eventStart(event: MouseEvent | TouchEvent) {
     event.stopPropagation()
     event.preventDefault()
     this._currentNode = this.model._eventDown(event)
@@ -76,7 +98,7 @@ export class Drauu {
       this.el!.appendChild(this._currentNode)
   }
 
-  private eventUp(event: MouseEvent | TouchEvent) {
+  private eventEnd(event: MouseEvent | TouchEvent) {
     const result = this.model._eventUp(event)
     if (!result) {
       this.cancel()
@@ -86,6 +108,12 @@ export class Drauu {
         this._currentNode = result
       this.commit()
     }
+  }
+
+  private eventKeyboard(event: KeyboardEvent) {
+    this.shiftPressed = event.shiftKey
+    // redraw
+    this.model.onMove(this.model.point)
   }
 
   private commit() {

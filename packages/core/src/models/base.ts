@@ -3,14 +3,10 @@ import { Drauu } from '../drauu'
 import { Point } from '../types'
 
 export abstract class BaseModel {
-  protected event: MouseEvent | TouchEvent = undefined!
-  protected point: Point = undefined!
+  event: MouseEvent | TouchEvent = undefined!
+  point: Point = undefined!
 
   constructor(private drauu: Drauu) {
-  }
-
-  get brush() {
-    return this.drauu.brush
   }
 
   onStart(point: Point): SVGElement | undefined {
@@ -23,6 +19,14 @@ export abstract class BaseModel {
 
   onEnd(point: Point): SVGElement | boolean | undefined {
     return undefined
+  }
+
+  get brush() {
+    return this.drauu.brush
+  }
+
+  get shiftPressed() {
+    return this.drauu.shiftPressed
   }
 
   getMousePosition(event: MouseEvent | TouchEvent) {
@@ -49,16 +53,25 @@ export abstract class BaseModel {
     this.point = this.getMousePosition(event)
   }
 
+  /**
+   * @internal
+   */
   _eventDown(event: MouseEvent | TouchEvent) {
     this._setEvent(event)
     return this.onStart(this.point)
   }
 
+  /**
+   * @internal
+   */
   _eventMove(event: MouseEvent | TouchEvent) {
     this._setEvent(event)
     return this.onMove(this.point)
   }
 
+  /**
+   * @internal
+   */
   _eventUp(event: MouseEvent | TouchEvent) {
     this._setEvent(event)
     return this.onEnd(this.point)

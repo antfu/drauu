@@ -29,10 +29,19 @@ export class RectModel extends BaseModel {
     const [x1, x2] = [this.startPoint.x, point.x].sort(numSort)
     const [y1, y2] = [this.startPoint.y, point.y].sort(numSort)
 
+    let dx = x2 - x1
+    let dy = y2 - y1
+
+    if (this.shiftPressed) {
+      const d = Math.min(dx, dy)
+      dx = d
+      dy = d
+    }
+
     this.rect.setAttribute('x', x1.toString())
     this.rect.setAttribute('y', y1.toString())
-    this.rect.setAttribute('width', (x2 - x1).toString())
-    this.rect.setAttribute('height', (y2 - y1).toString())
+    this.rect.setAttribute('width', dx.toString())
+    this.rect.setAttribute('height', dy.toString())
 
     return true
   }

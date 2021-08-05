@@ -20,8 +20,17 @@ export class EllipseModel extends BaseModel {
     if (!this.ellipse || !this.startPoint)
       return false
 
-    this.ellipse.setAttribute('rx', Math.abs(point.x - this.startPoint.x).toString())
-    this.ellipse.setAttribute('ry', Math.abs(point.y - this.startPoint.y).toString())
+    let dx = Math.abs(point.x - this.startPoint.x)
+    let dy = Math.abs(point.y - this.startPoint.y)
+
+    if (this.shiftPressed) {
+      const d = Math.min(dx, dy)
+      dx = d
+      dy = d
+    }
+
+    this.ellipse.setAttribute('rx', dx.toString())
+    this.ellipse.setAttribute('ry', dy.toString())
 
     return true
   }

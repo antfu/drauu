@@ -7,13 +7,26 @@
 </head>
 <body>
   <div id="app" class="w-screen h-screen flex flex-col">
-    <div class="p-3 border-b border-gray-200 flex gap-4">
-      <div class="overflow-hidden relative w-10 h-10 rounded-full border border-gray-300">
-        <input id="color" type="color" value="#000000" class="w-20 h-20 -m-5" />
-      </div>
-      <h1 class="align-middle my-auto text-xl font-serif opacity-50">
+    <div class="p-3 border-b border-gray-200 flex gap-1 children:align-middle children:my-auto">
+      <h1 class="text-xl font-serif opacity-50 mx-4">
         Drauu
       </h1>
+      <button id="undo">↩️</button>
+      <button id="redo">↪️</button>
+      <div class="mx-5 opacity-25">/</div>
+      <button class="active" id="m-draw">✍️</button>
+      <button id="m-line">📏</button>
+      <button id="m-rect">🔳</button>
+      <button id="m-ellipse">🔘</button>
+      <div class="mx-5 opacity-25">/</div>
+      <button data-color="#000000" class="active">​⚫️​</button>
+      <button data-color="#ed153d">​🔴​</button>
+      <button data-color="#ed9a26">​🟠​​</button>
+      <button data-color="#ede215">​​🟡​​</button>
+      <button data-color="#30bd20">​🟢​​</button>
+      <button data-color="#2656bf">​​🔵​​</button>
+      <button data-color="#c24aed">​🟣​​</button>
+      <button data-color="#bf6b26">​​🟤​</button>
     </div>
     <svg id="svg" class="w-full flex-auto z-10"></svg>
     <pre class="font-mono fixed right-8 bottom-0 opacity-35 pointer-events-none">

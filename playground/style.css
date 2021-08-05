@@ -1,0 +1,7 @@
+button {
+  @apply !outline-none w-8 h-8;
+
+  &.active {
+    @apply bg-gray-100 rounded;
+  }
+}

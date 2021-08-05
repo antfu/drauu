@@ -39,7 +39,7 @@ export class DrawModel extends BaseModel {
   }
 
   get smoothness() {
-    return this.brush.smoothness ?? 4
+    return this.brush.draw?.smoothness ?? 4
   }
 
   appendToBuffer(point: Point) {

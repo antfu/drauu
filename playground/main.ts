@@ -23,7 +23,10 @@ window.addEventListener('keydown', (e) => {
     drauu.mode = 'draw'
   }
   else if (e.code === 'KeyR') {
-    drauu.mode = 'rect'
+    drauu.mode = 'rectangle'
+  }
+  else if (e.code === 'KeyE') {
+    drauu.mode = 'ellipse'
   }
   else if (e.code === 'KeyC') {
     drauu.clear()

@@ -2,9 +2,29 @@ export interface Brush {
   color: string
   size: number
   /**
-   * @default 4
+   * @default 'transparent'
    */
-  smoothness?: number
+  fill?: string
+
+  draw?: {
+    /**
+     * @default 4
+     */
+    smoothness?: number
+
+    /**
+     * WIP
+     * @default 0
+     */
+    pressure?: number
+  }
+
+  rectangle?: {
+    /**
+     * @default 0
+     */
+    radius?: number
+  }
 }
 
 export interface Point {
@@ -12,7 +32,7 @@ export interface Point {
   y: number
 }
 
-export type DrawingMode = 'draw' | 'line' | 'rect'
+export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
 
 export interface Options {
   el?: string | SVGSVGElement

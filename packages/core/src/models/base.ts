@@ -36,7 +36,7 @@ export abstract class BaseModel {
 
   protected createElement<K extends keyof SVGElementTagNameMap>(name: K): SVGElementTagNameMap[K] {
     const el = document.createElementNS('http://www.w3.org/2000/svg', name)
-    el.setAttribute('fill', 'transparent')
+    el.setAttribute('fill', this.brush.fill ?? 'transparent')
     el.setAttribute('stroke', this.brush.color)
     el.setAttribute('stroke-width', this.brush.size.toString())
     el.setAttribute('stroke-linecap', 'round')

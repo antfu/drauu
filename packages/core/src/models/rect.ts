@@ -11,6 +11,11 @@ export class RectModel extends BaseModel {
 
     this.startPoint = point
 
+    if (this.brush.rectangle?.radius) {
+      this.rect.setAttribute('rx', this.brush.rectangle.radius.toString())
+      this.rect.setAttribute('ry', this.brush.rectangle.radius.toString())
+    }
+
     this.rect.setAttribute('x', point.x.toString())
     this.rect.setAttribute('y', point.y.toString())
 

@@ -70,12 +70,16 @@ export class Drauu {
       window.removeEventListener('keydown', keyboard, false)
       window.removeEventListener('keyup', keyboard, false)
     })
+
+    this._emitter.emit('mounted')
   }
 
   unmount() {
     this._disposables.forEach(fn => fn())
     this._disposables.length = 0
     this.el = null
+
+    this._emitter.emit('unmounted')
   }
 
   on<K extends keyof EventsMap>(type: K, fn: EventsMap[K]) {

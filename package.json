@@ -1,7 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "play:dev": "nr -C playground dev"
+    "play:dev": "pnpm -C playground run dev -- --open",
+    "js:dev": "pnpm run -r --parallel --filter ./packages dev",
+    "js:build": "pnpm run -r --filter ./packages build",
+    "dev": "nr play:dev",
+    "build": "nr js:build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",
@@ -9,7 +13,9 @@
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
+    "npm-run-all": "^4.1.5",
     "pnpm": "^6.11.5",
+    "tsup": "^4.13.1",
     "typescript": "^4.3.5"
   }
 }

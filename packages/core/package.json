@@ -1,4 +1,8 @@
 {
   "name": "@drauu/core",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nr build --watch",
+    "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting"
+  }
 }

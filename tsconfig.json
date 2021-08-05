@@ -12,7 +12,10 @@
     "resolveJsonModule": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "drauu": ["./packages/core/src/index.ts"]
+    }
   },
   "exclude": ["dist", "node_modules"]
 }

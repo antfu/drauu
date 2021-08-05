@@ -31,6 +31,7 @@ const drauu = createDrauu({ el: '#svg' })
 Inspired by
 
 - [scribby](https://github.com/naknomum/scribby) by [naknomum](https://github.com/naknomum)
+- [excalidraw](https://github.com/excalidraw/excalidraw)
 - [draw](https://github.com/amoshydra/draw) by [amoshydra](https://github.com/amoshydra)
 - [live-draw](https://github.com/antfu/live-draw) by [antfu](https://github.com/antfu)
 

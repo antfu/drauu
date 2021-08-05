@@ -1,0 +1,7 @@
+{
+  "name": "drauu",
+  "version": "0.0.0",
+  "dependencies": {
+    "@drauu/core": "workspace:*"
+  }
+}

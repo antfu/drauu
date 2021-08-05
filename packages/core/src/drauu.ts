@@ -165,6 +165,15 @@ export class Drauu {
       this._currentNode = undefined
     }
   }
+
+  dump() {
+    return this.el!.innerHTML
+  }
+
+  load(svg: string) {
+    this.clear()
+    this.el!.innerHTML = svg
+  }
 }
 
 export function createDrauu(options?: Options) {

@@ -7,7 +7,7 @@
     "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",
     "build": "nr js:build",
-    "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish"
+    "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",

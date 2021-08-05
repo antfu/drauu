@@ -1,11 +1,13 @@
 {
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "js:dev": "pnpm run -r --parallel --filter ./packages dev",
     "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",
-    "build": "nr js:build"
+    "build": "nr js:build",
+    "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",

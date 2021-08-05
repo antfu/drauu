@@ -1,6 +1,32 @@
 {
   "name": "drauu",
   "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antfu/drauu/issues"
+  },
+  "homepage": "https://github.com/antfu/drauu#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfu/drauu.git"
+  },
+  "keywords": [],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "nr tsup --watch",
+    "tsup": "tsup src/index.ts --format esm,cjs --dts --no-splitting --clean",
+    "build": "nr tsup && cp ../core/dist/index.global.js dist",
+    "prepublishOnly": "nr build"
+  },
   "dependencies": {
     "@drauu/core": "workspace:*"
   }

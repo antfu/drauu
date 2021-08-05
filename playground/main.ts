@@ -22,6 +22,12 @@ window.addEventListener('keydown', (e) => {
   else if (e.code === 'KeyD') {
     drauu.mode = 'draw'
   }
+  else if (e.code === 'KeyR') {
+    drauu.mode = 'rect'
+  }
+  else if (e.code === 'KeyC') {
+    drauu.clear()
+  }
   else if (e.code === 'Equal') {
     drauu.brush.size += 0.5
   }

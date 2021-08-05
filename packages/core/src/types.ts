@@ -12,7 +12,7 @@ export interface Point {
   y: number
 }
 
-export type DrawingMode = 'draw' | 'line'
+export type DrawingMode = 'draw' | 'line' | 'rect'
 
 export interface Options {
   el?: string | SVGSVGElement

@@ -7,9 +7,8 @@ export class Drauu {
   brush: Brush
 
   private _models = createModels(this)
-
-  private tempNode: SVGElement | undefined
-  private undoStack: Node[] = []
+  private _currentNode: SVGElement | undefined
+  private _undoStack: Node[] = []
 
   constructor(public options: Options = {}) {
     this.brush = options.brush || { color: 'black', size: 2 }
@@ -50,15 +49,15 @@ export class Drauu {
     const el = this.el!
     if (!el.lastElementChild)
       return false
-    this.undoStack.push(el.lastElementChild.cloneNode(true))
+    this._undoStack.push(el.lastElementChild.cloneNode(true))
     el.lastElementChild.remove()
     return true
   }
 
   redo() {
-    if (!this.undoStack.length)
+    if (!this._undoStack.length)
       return false
-    this.el!.appendChild(this.undoStack.pop()!)
+    this.el!.appendChild(this._undoStack.pop()!)
     return true
   }
 
@@ -72,29 +71,38 @@ export class Drauu {
   private eventDown(event: MouseEvent | TouchEvent) {
     event.stopPropagation()
     event.preventDefault()
-    this.tempNode = this.model._eventDown(event)
-    if (this.tempNode)
-      this.el!.appendChild(this.tempNode)
+    this._currentNode = this.model._eventDown(event)
+    if (this._currentNode)
+      this.el!.appendChild(this._currentNode)
   }
 
   private eventUp(event: MouseEvent | TouchEvent) {
     const result = this.model._eventUp(event)
-    if (!result)
+    if (!result) {
       this.cancel()
-
-    else
+    }
+    else {
+      if (result instanceof Element && result !== this._currentNode)
+        this._currentNode = result
       this.commit()
+    }
   }
 
   private commit() {
-    this.undoStack.length = 0
-    this.tempNode = undefined
+    this._undoStack.length = 0
+    this._currentNode = undefined
+  }
+
+  clear() {
+    this._undoStack.length = 0
+    this.cancel()
+    this.el!.innerHTML = ''
   }
 
   cancel() {
-    if (this.tempNode) {
-      this.el!.removeChild(this.tempNode)
-      this.tempNode = undefined
+    if (this._currentNode) {
+      this.el!.removeChild(this._currentNode)
+      this._currentNode = undefined
     }
   }
 }

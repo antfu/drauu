@@ -48,7 +48,7 @@ export interface Options {
 }
 
 export interface EventsMap {
-  update: () => void
+  changed: () => void
   mounted: () => void
   unmounted: () => void
 }

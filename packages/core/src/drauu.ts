@@ -92,6 +92,7 @@ export class Drauu {
       return false
     this._undoStack.push(el.lastElementChild.cloneNode(true))
     el.lastElementChild.remove()
+    this._emitter.emit('changed')
     return true
   }
 
@@ -99,6 +100,7 @@ export class Drauu {
     if (!this._undoStack.length)
       return false
     this.el!.appendChild(this._undoStack.pop()!)
+    this._emitter.emit('changed')
     return true
   }
 
@@ -114,7 +116,7 @@ export class Drauu {
     if (this.model._eventMove(event)) {
       event.stopPropagation()
       event.preventDefault()
-      this._emitter.emit('update')
+      this._emitter.emit('changed')
     }
   }
 
@@ -124,7 +126,7 @@ export class Drauu {
     this._currentNode = this.model._eventDown(event)
     if (this._currentNode)
       this.el!.appendChild(this._currentNode)
-    this._emitter.emit('update')
+    this._emitter.emit('changed')
   }
 
   private eventEnd(event: MouseEvent | TouchEvent) {
@@ -137,7 +139,7 @@ export class Drauu {
         this._currentNode = result
       this.commit()
     }
-    this._emitter.emit('update')
+    this._emitter.emit('changed')
   }
 
   private eventKeyboard(event: KeyboardEvent) {
@@ -145,7 +147,7 @@ export class Drauu {
     this.altPressed = event.altKey
     // redraw
     this.model.onMove(this.model.point)
-    this._emitter.emit('update')
+    this._emitter.emit('changed')
   }
 
   private commit() {

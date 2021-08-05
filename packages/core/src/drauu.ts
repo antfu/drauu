@@ -1,5 +1,6 @@
+import { createNanoEvents } from 'nanoevents'
 import { createModels } from './models'
-import { Brush, Options, DrawingMode } from './types'
+import { Brush, Options, DrawingMode, EventsMap } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
@@ -7,12 +8,13 @@ export class Drauu {
   brush: Brush
   shiftPressed = false
 
+  private _emitter = createNanoEvents<EventsMap>()
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
   private _undoStack: Node[] = []
   private _disposables: (() => void)[] = []
 
-  constructor(public options: Options = {}) {
+  constructor(options: Options = {}) {
     this.brush = options.brush || { color: 'black', size: 2 }
     this.mode = options.mode || 'draw'
     if (options.el)
@@ -67,6 +69,10 @@ export class Drauu {
     this._disposables.length = 0
   }
 
+  on<K extends keyof EventsMap>(type: K, fn: EventsMap[K]) {
+    return this._emitter.on(type, fn)
+  }
+
   undo() {
     const el = this.el!
     if (!el.lastElementChild)
@@ -87,6 +93,7 @@ export class Drauu {
     if (this.model._eventMove(event)) {
       event.stopPropagation()
       event.preventDefault()
+      this._emitter.emit('update')
     }
   }
 
@@ -96,6 +103,7 @@ export class Drauu {
     this._currentNode = this.model._eventDown(event)
     if (this._currentNode)
       this.el!.appendChild(this._currentNode)
+    this._emitter.emit('update')
   }
 
   private eventEnd(event: MouseEvent | TouchEvent) {
@@ -108,12 +116,14 @@ export class Drauu {
         this._currentNode = result
       this.commit()
     }
+    this._emitter.emit('update')
   }
 
   private eventKeyboard(event: KeyboardEvent) {
     this.shiftPressed = event.shiftKey
     // redraw
     this.model.onMove(this.model.point)
+    this._emitter.emit('update')
   }
 
   private commit() {

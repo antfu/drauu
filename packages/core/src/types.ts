@@ -39,3 +39,7 @@ export interface Options {
   brush?: Brush
   mode?: DrawingMode
 }
+
+export interface EventsMap {
+  update: () => void
+}

@@ -5,7 +5,7 @@ import { Point } from '../types'
 export abstract class BaseModel<T extends SVGElement> {
   event: MouseEvent | TouchEvent = undefined!
   point: Point = undefined!
-  start: Point | null = null
+  start: Point = undefined!
   el: T | null = null
 
   constructor(private drauu: Drauu) {

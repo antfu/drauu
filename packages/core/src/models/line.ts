@@ -17,8 +17,27 @@ export class LineModel extends BaseModel<SVGLineElement> {
     if (!this.el)
       return false
 
-    this.attr('x2', point.x)
-    this.attr('y2', point.y)
+    let { x, y } = point
+
+    if (this.shiftPressed) {
+      const dx = point.x - this.start.x
+      const dy = point.y - this.start.y
+      if (dy !== 0) {
+        let slope = dx / dy
+        slope = Math.round(slope)
+        if (Math.abs(slope) <= 1) {
+          x = this.start.x + dy * slope
+          y = this.start.y + dy
+        }
+        else {
+          x = this.start.x + dx
+          y = this.start.y
+        }
+      }
+    }
+
+    this.attr('x2', x)
+    this.attr('y2', y)
 
     return true
   }

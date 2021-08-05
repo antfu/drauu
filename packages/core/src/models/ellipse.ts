@@ -32,7 +32,6 @@ export class EllipseModel extends BaseModel<SVGEllipseElement> {
 
   override onEnd() {
     const path = this.el
-    this.start = null
     this.el = null
 
     if (!path)

@@ -43,7 +43,6 @@ export class RectModel extends BaseModel<SVGRectElement> {
 
   override onEnd() {
     const path = this.el
-    this.start = null
     this.el = null
 
     if (!path)

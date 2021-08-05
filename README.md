@@ -1,13 +1,14 @@
 # drauu
 
-SVG based drawing tool in browser.
+SVG-based drawing tool in browser.
 
 ## Features
 
-- Vanilla JavaScript
+- Vanilla JavaScript - integrate into any framework you like
 - Zero Dependency
 - SVG based
-- Headless (unstyled)
+- Headless (unstyled) - style it as you want
+- Transparent background - draw on top of dynamic content
 - Undo / Redo
 
 ## Install

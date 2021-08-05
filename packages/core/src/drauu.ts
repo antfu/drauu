@@ -26,7 +26,14 @@ export class Drauu {
     return this._models[this.mode]
   }
 
+  get mounted() {
+    return !!this.el
+  }
+
   mount(selector: string | SVGSVGElement) {
+    if (this.el)
+      throw new Error('[drauu] already mounted, unmount previous target first')
+
     if (typeof selector === 'string')
       this.el = document.querySelector(selector)
     else
@@ -65,9 +72,10 @@ export class Drauu {
     })
   }
 
-  unmounted() {
+  unmount() {
     this._disposables.forEach(fn => fn())
     this._disposables.length = 0
+    this.el = null
   }
 
   on<K extends keyof EventsMap>(type: K, fn: EventsMap[K]) {

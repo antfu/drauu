@@ -102,6 +102,14 @@ export class Drauu {
     return true
   }
 
+  canRedo() {
+    return !!this._undoStack.length
+  }
+
+  canUndo() {
+    return !!this.el?.lastElementChild
+  }
+
   private eventMove(event: MouseEvent | TouchEvent) {
     if (this.model._eventMove(event)) {
       event.stopPropagation()

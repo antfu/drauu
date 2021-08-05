@@ -1,16 +1,6 @@
-export interface DrauuOptions {
-  el?: string | SVGSVGElement
-}
-
-export interface DrauuPen {
-  color: string
-  width: number
-}
-
-export interface Point {
-  x: number
-  y: number
-}
+import { DrauuBaseModel } from './models/base'
+import { DrauuDrawModel } from './models/draw'
+import { DrauuPen, DrauuOptions } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
@@ -19,10 +9,10 @@ export class Drauu {
     width: 2,
   }
 
-  private path: SVGPathElement | null = null
-  private strPath = ''
-  private buffer: Point[] = []
-  private bufferSize = 2
+  model: DrauuBaseModel = new DrauuDrawModel(this)
+
+  private tempNode: SVGElement | undefined
+  private undoStack: Node[] = []
 
   constructor(public options: DrauuOptions = {}) {
     if (options.el)
@@ -55,100 +45,52 @@ export class Drauu {
     // TODO:
   }
 
-  eventMove(ev: MouseEvent | TouchEvent) {
-    if (this.path) {
-      ev.stopPropagation()
-      ev.preventDefault()
-      this.appendToBuffer(this.getMousePosition(ev))
-      this.updateSvgPath()
-    }
-  }
-
-  eventDown(ev: MouseEvent | TouchEvent) {
-    ev.stopPropagation()
-    ev.preventDefault()
-    this.path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    this.path.setAttribute('fill', 'transparent')
-    this.path.setAttribute('stroke', this.pen.color)
-    this.path.setAttribute('stroke-width', this.pen.width.toString())
-    this.path.setAttribute('stroke-linecap', 'round')
-    this.buffer = []
-    const pt = this.getMousePosition(ev)
-    this.appendToBuffer(pt)
-    this.strPath = `M${this.nicerDecimal(pt.x)} ${this.nicerDecimal(pt.y)}`
-    this.path.setAttribute('d', this.strPath)
-    this.el!.appendChild(this.path)
-  }
-
-  eventUp() {
-    if (!this.path)
+  undo() {
+    const el = this.el!
+    if (!el.lastElementChild)
       return false
-    if (!this.path.getTotalLength()) {
-      this.el!.lastElementChild?.remove()
-      this.path = null
-      return false
-    }
-    this.path = null
+    this.undoStack.push(el.lastElementChild.cloneNode(true))
+    el.lastElementChild.remove()
     return true
   }
 
-  // these are some utility functions
-  getMousePosition(ev: MouseEvent | TouchEvent) {
-    const rect = this.el!.getBoundingClientRect()
-    if (ev instanceof MouseEvent) return { x: ev.pageX - rect.left, y: ev.pageY - rect.top }
-    if (ev instanceof Touch) return { x: ev.targetTouches[0].pageX - rect.left, y: ev.targetTouches[0].pageY - rect.top }
-    throw new Error('unsupported event type')
+  redo() {
+    if (!this.undoStack.length)
+      return false
+    this.el!.appendChild(this.undoStack.pop()!)
+    return true
   }
 
-  updateSvgPath() {
-    let pt = this.getAveragePoint(0)
-    if (!pt)
-      return
+  eventMove(event: MouseEvent | TouchEvent) {
+    this.model._eventMove(event)
+  }
 
-    // Get the smoothed part of the path that will not change
-    this.strPath += ` L${this.nicerDecimal(pt.x)} ${this.nicerDecimal(pt.y)}`
-    // Get the last part of the path (close to the current mouse position)
-    // This part will change if the mouse moves again
-    let tmpPath = ''
-    for (let offset = 2; offset < this.buffer.length; offset += 2) {
-      pt = this.getAveragePoint(offset)
-      if (pt)
-        tmpPath += ` L${this.nicerDecimal(pt.x)} ${this.nicerDecimal(pt.y)}`
+  eventDown(event: MouseEvent | TouchEvent) {
+    event.stopPropagation()
+    event.preventDefault()
+    this.tempNode = this.model._eventDown(event)
+    if (this.tempNode)
+      this.el!.appendChild(this.tempNode)
+  }
+
+  eventUp(event: MouseEvent | TouchEvent) {
+    const result = this.model._eventUp(event)
+    if (!result)
+      this.cancel()
+    else
+      this.commit()
+  }
+
+  private commit() {
+    this.undoStack.length = 0
+    this.tempNode = undefined
+  }
+
+  private cancel() {
+    if (this.tempNode) {
+      this.el!.removeChild(this.tempNode)
+      this.tempNode = undefined
     }
-    // Set the complete current path coordinates
-    this.path!.setAttribute('d', this.strPath + tmpPath)
-  }
-
-  appendToBuffer(point: Point) {
-    this.buffer.push(point)
-    while (this.buffer.length > this.bufferSize)
-      this.buffer.shift()
-  }
-
-  // Calculate the average point, starting at offset in the buffer
-  getAveragePoint(offset: number): Point | null {
-    const len = this.buffer.length
-    if (len % 2 === 1 || len >= this.bufferSize) {
-      let totalX = 0
-      let totalY = 0
-      let pt, i
-      let count = 0
-      for (i = offset; i < len; i++) {
-        count++
-        pt = this.buffer[i]
-        totalX += pt.x
-        totalY += pt.y
-      }
-      return {
-        x: totalX / count,
-        y: totalY / count,
-      }
-    }
-    return null
-  }
-
-  nicerDecimal(d: number) {
-    return Math.floor(d * 100) / 100
   }
 }
 

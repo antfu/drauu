@@ -36,8 +36,18 @@ export class LineModel extends BaseModel<SVGLineElement> {
       }
     }
 
-    this.attr('x2', x)
-    this.attr('y2', y)
+    if (this.altPressed) {
+      this.attr('x1', this.start.x * 2 - x)
+      this.attr('y1', this.start.y * 2 - y)
+      this.attr('x2', x)
+      this.attr('y2', y)
+    }
+    else {
+      this.attr('x1', this.start.x)
+      this.attr('y1', this.start.y)
+      this.attr('x2', x)
+      this.attr('y2', y)
+    }
 
     return true
   }

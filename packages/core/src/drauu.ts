@@ -7,6 +7,7 @@ export class Drauu {
   mode: DrawingMode
   brush: Brush
   shiftPressed = false
+  altPressed = false
 
   private _emitter = createNanoEvents<EventsMap>()
   private _models = createModels(this)
@@ -121,6 +122,7 @@ export class Drauu {
 
   private eventKeyboard(event: KeyboardEvent) {
     this.shiftPressed = event.shiftKey
+    this.altPressed = event.altKey
     // redraw
     this.model.onMove(this.model.point)
     this._emitter.emit('update')

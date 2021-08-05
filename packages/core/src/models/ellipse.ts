@@ -1,4 +1,5 @@
 import { Point } from '../types'
+import { numSort, splitNum } from '../utils'
 import { BaseModel } from './base'
 
 export class EllipseModel extends BaseModel<SVGEllipseElement> {
@@ -15,8 +16,10 @@ export class EllipseModel extends BaseModel<SVGEllipseElement> {
     if (!this.el || !this.start)
       return false
 
-    let dx = Math.abs(point.x - this.start.x)
-    let dy = Math.abs(point.y - this.start.y)
+    // eslint-disable-next-line prefer-const
+    let [dx, sx] = splitNum(point.x - this.start.x)
+    // eslint-disable-next-line prefer-const
+    let [dy, sy] = splitNum(point.y - this.start.y)
 
     if (this.shiftPressed) {
       const d = Math.min(dx, dy)
@@ -24,8 +27,21 @@ export class EllipseModel extends BaseModel<SVGEllipseElement> {
       dy = d
     }
 
-    this.attr('rx', dx)
-    this.attr('ry', dy)
+    if (this.altPressed) {
+      this.attr('cx', this.start.x)
+      this.attr('cy', this.start.y)
+      this.attr('rx', dx)
+      this.attr('ry', dy)
+    }
+    else {
+      const [x1, x2] = [this.start.x, this.start.x + dx * sx].sort(numSort)
+      const [y1, y2] = [this.start.y, this.start.y + dy * sy].sort(numSort)
+
+      this.attr('cx', (x1 + x2) / 2)
+      this.attr('cy', (y1 + y2) / 2)
+      this.attr('rx', (x2 - x1) / 2)
+      this.attr('ry', (y2 - y1) / 2)
+    }
 
     return true
   }

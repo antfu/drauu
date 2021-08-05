@@ -1,5 +1,5 @@
 import { Point } from '../types'
-import { numSort } from '../utils'
+import { numSort, splitNum } from '../utils'
 import { BaseModel } from './base'
 
 export class RectModel extends BaseModel<SVGRectElement> {
@@ -21,11 +21,10 @@ export class RectModel extends BaseModel<SVGRectElement> {
     if (!this.el || !this.start)
       return false
 
-    const [x1, x2] = [this.start.x, point.x].sort(numSort)
-    const [y1, y2] = [this.start.y, point.y].sort(numSort)
-
-    let dx = x2 - x1
-    let dy = y2 - y1
+    // eslint-disable-next-line prefer-const
+    let [dx, sx] = splitNum(point.x - this.start.x)
+    // eslint-disable-next-line prefer-const
+    let [dy, sy] = splitNum(point.y - this.start.y)
 
     if (this.shiftPressed) {
       const d = Math.min(dx, dy)
@@ -33,10 +32,21 @@ export class RectModel extends BaseModel<SVGRectElement> {
       dy = d
     }
 
-    this.attr('x', x1)
-    this.attr('y', y1)
-    this.attr('width', dx)
-    this.attr('height', dy)
+    if (this.altPressed) {
+      this.attr('x', this.start.x - dx)
+      this.attr('y', this.start.y - dy)
+      this.attr('width', dx * 2)
+      this.attr('height', dy * 2)
+    }
+    else {
+      const [x1, x2] = [this.start.x, this.start.x + dx * sx].sort(numSort)
+      const [y1, y2] = [this.start.y, this.start.y + dy * sy].sort(numSort)
+
+      this.attr('x', x1)
+      this.attr('y', y1)
+      this.attr('width', x2 - x1)
+      this.attr('height', y2 - y1)
+    }
 
     return true
   }

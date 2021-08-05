@@ -31,6 +31,10 @@ export abstract class BaseModel<T extends SVGElement> {
     return this.drauu.shiftPressed
   }
 
+  get altPressed() {
+    return this.drauu.altPressed
+  }
+
   getMousePosition(event: MouseEvent | TouchEvent) {
     const rect = this.drauu.el!.getBoundingClientRect()
     if (event instanceof MouseEvent)

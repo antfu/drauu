@@ -37,10 +37,20 @@ export abstract class BaseModel<T extends SVGElement> {
 
   getMousePosition(event: MouseEvent | TouchEvent) {
     const rect = this.drauu.el!.getBoundingClientRect()
-    if (event instanceof MouseEvent)
-      return { x: event.pageX - rect.left, y: event.pageY - rect.top }
-    if (event instanceof Touch)
-      return { x: event.targetTouches[0].pageX - rect.left, y: event.targetTouches[0].pageY - rect.top }
+    const scale = this.drauu.options.corrdinateScale ?? 1
+
+    if (event instanceof MouseEvent) {
+      return {
+        x: (event.pageX - rect.left) * scale,
+        y: (event.pageY - rect.top) * scale,
+      }
+    }
+    if (event instanceof Touch) {
+      return {
+        x: (event.targetTouches[0].pageX - rect.left) * scale,
+        y: (event.targetTouches[0].pageY - rect.top) * scale,
+      }
+    }
     throw new Error('unsupported event type')
   }
 

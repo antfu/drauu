@@ -37,7 +37,14 @@ export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
 export interface Options {
   el?: string | SVGSVGElement
   brush?: Brush
+  /**
+   * @default 'brush'
+   */
   mode?: DrawingMode
+  /**
+   * @default 1
+   */
+  corrdinateScale?: number
 }
 
 export interface EventsMap {

@@ -15,7 +15,7 @@ export class Drauu {
   private _undoStack: Node[] = []
   private _disposables: (() => void)[] = []
 
-  constructor(options: Options = {}) {
+  constructor(public options: Options = {}) {
     this.brush = options.brush || { color: 'black', size: 2 }
     this.mode = options.mode || 'draw'
     if (options.el)

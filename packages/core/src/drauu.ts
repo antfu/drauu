@@ -123,6 +123,7 @@ export class Drauu {
   private eventStart(event: MouseEvent | TouchEvent) {
     event.stopPropagation()
     event.preventDefault()
+    this._emitter.emit('start')
     this._currentNode = this.model._eventDown(event)
     if (this._currentNode)
       this.el!.appendChild(this._currentNode)
@@ -139,6 +140,7 @@ export class Drauu {
         this._currentNode = result
       this.commit()
     }
+    this._emitter.emit('end')
     this._emitter.emit('changed')
   }
 

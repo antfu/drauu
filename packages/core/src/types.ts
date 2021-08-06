@@ -48,6 +48,8 @@ export interface Options {
 }
 
 export interface EventsMap {
+  start: () => void
+  end: () => void
   changed: () => void
   mounted: () => void
   unmounted: () => void

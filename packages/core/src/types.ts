@@ -1,10 +1,20 @@
 export interface Brush {
+  /**
+   * Stroke color
+   */
   color: string
+  /**
+   * Stroke width
+   */
   size: number
   /**
    * @default 'transparent'
    */
   fill?: string
+  /**
+   * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray
+   */
+  dasharray?: string
 
   draw?: {
     /**

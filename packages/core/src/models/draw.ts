@@ -1,5 +1,6 @@
 import { Point } from '../types'
 import { D } from '../utils'
+import { simplify } from '../utils/simpify'
 import { BaseModel } from './base'
 
 const SEGMENT_LENGTH = 4
@@ -7,6 +8,7 @@ const SEGMENT_LENGTH = 4
 export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
   private points: Point[] = []
   private index = 0
+  private count = 0
 
   override onStart(point: Point) {
     this.el = this.pressure
@@ -23,8 +25,10 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
     if (!this.el)
       return false
 
-    if (this.points[this.points.length - 1] !== point)
+    if (this.points[this.points.length - 1] !== point) {
       this.points.push(point)
+      this.count += 1
+    }
 
     // when using pressure, we need to divide the path intro multiple segments
     // to have different size and weight in each part
@@ -46,12 +50,20 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
     }
     // when not using pressure, we just draw the path
     else {
+      if (this.simplify && this.count > 5) {
+        this.points = simplify(this.points, 1, true)
+        this.count = 0
+      }
+
       this.attr('d' as any, toSvgData(this.points))
     }
     return true
   }
 
   override onEnd() {
+    if (!this.pressure && this.simplify)
+      this.attr('d' as any, toSvgData(simplify(this.points, 1, true)))
+
     const path = this.el
     this.el = null
 
@@ -66,7 +78,11 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
   }
 
   get pressure() {
-    return !!this.brush.pressure
+    return !!this.brush.draw?.pressure
+  }
+
+  get simplify() {
+    return !!this.brush.draw?.simplify
   }
 }
 

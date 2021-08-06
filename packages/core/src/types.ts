@@ -16,11 +16,22 @@ export interface Brush {
    */
   dasharray?: string
 
-  /**
-   * @expiremental
-   * @default true
-   */
-  pressure?: boolean
+  draw?: {
+    /**
+     * Read the presure from the given sensor and change the weight of the stroke
+     *
+     * @expiremental
+     * @default false
+     */
+    pressure?: boolean
+    /**
+     * Simplify the points of the lines
+     *
+     * @expiremental
+     * @default false
+     */
+    simplify?: boolean
+  }
 
   rectangle?: {
     /**

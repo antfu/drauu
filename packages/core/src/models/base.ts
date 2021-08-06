@@ -45,10 +45,10 @@ export abstract class BaseModel<T extends SVGElement> {
         y: (event.pageY - rect.top) * scale,
       }
     }
-    if (event instanceof Touch) {
+    if (event instanceof TouchEvent) {
       return {
-        x: (event.targetTouches[0].pageX - rect.left) * scale,
-        y: (event.targetTouches[0].pageY - rect.top) * scale,
+        x: ((event.targetTouches[0]?.pageX || 0) - rect.left) * scale,
+        y: ((event.targetTouches[0]?.pageY || 0) - rect.top) * scale,
       }
     }
     throw new Error('unsupported event type')

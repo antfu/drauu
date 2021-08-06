@@ -19,9 +19,9 @@ export interface Brush {
   draw?: {
     /**
      * WIP
-     * @default 0
+     * @default true
      */
-    pressure?: number
+    pressure?: boolean
   }
 
   rectangle?: {
@@ -35,6 +35,7 @@ export interface Brush {
 export interface Point {
   x: number
   y: number
+  force?: number
 }
 
 export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'

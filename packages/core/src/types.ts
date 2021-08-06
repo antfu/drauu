@@ -8,11 +8,6 @@ export interface Brush {
 
   draw?: {
     /**
-     * @default 4
-     */
-    smoothness?: number
-
-    /**
      * WIP
      * @default 0
      */

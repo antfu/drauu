@@ -1,17 +1,12 @@
 import { Point } from '../types'
-import { decimal } from '../utils'
 import { BaseModel } from './base'
 
 export class DrawModel extends BaseModel<SVGPathElement> {
-  private smoothBuffer: Point[] = []
-  private strPath = ''
+  private points: Point[] = []
 
   override onStart(point: Point) {
     this.el = this.createElement('path')
-    this.smoothBuffer = []
-    this.appendToBuffer(point)
-    this.strPath = `M${decimal(point.x)} ${decimal(point.y)}`
-    this.attr('d' as any, this.strPath)
+    this.points = [point]
 
     return this.el
   }
@@ -20,8 +15,10 @@ export class DrawModel extends BaseModel<SVGPathElement> {
     if (!this.el)
       return false
 
-    this.appendToBuffer(point)
-    this.updateSvgPath()
+    if (this.points[this.points.length - 1] !== point)
+      this.points.push(point)
+
+    this.el!.setAttribute('d', toSvgData(this.points))
     return true
   }
 
@@ -36,55 +33,49 @@ export class DrawModel extends BaseModel<SVGPathElement> {
 
     return true
   }
+}
 
-  get smoothness() {
-    return this.brush.draw?.smoothness ?? 4
+// https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
+function line(a: Point, b: Point) {
+  const lengthX = b.x - a.x
+  const lengthY = b.y - a.y
+  return {
+    length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+    angle: Math.atan2(lengthY, lengthX),
   }
+}
 
-  appendToBuffer(point: Point) {
-    this.smoothBuffer.push(point)
-    while (this.smoothBuffer.length > this.smoothness)
-      this.smoothBuffer.shift()
-  }
+function controlPoint(current: Point, previous: Point, next?: Point, reverse?: boolean) {
+  // When 'current' is the first or last point of the array
+  // 'previous' or 'next' don't exist.
+  // Replace with 'current'
+  const p = previous || current
+  const n = next || current
+  // The smoothing ratio
+  const smoothing = 0.2
+  // Properties of the opposed-line
+  const o = line(p, n)
+  // If is end-control-point, add PI to the angle to go backward
+  const angle = o.angle + (reverse ? Math.PI : 0)
+  const length = o.length * smoothing
+  // The control point position is relative to the current point
+  const x = current.x + Math.cos(angle) * length
+  const y = current.y + Math.sin(angle) * length
+  return { x, y }
+}
 
-  updateSvgPath() {
-    let pt = this.getAveragePoint(0)
-    if (!pt)
-      return
+function bezierCommand(point: Point, i: number, points: Point[]) {
+  // start control point
+  const cps = controlPoint(points[i - 1], points[i - 2], point)
+  // end control point
+  const cpe = controlPoint(point, points[i - 1], points[i + 1], true)
+  return `C ${cps.x},${cps.y} ${cpe.x},${cpe.y} ${point.x},${point.y}`
+}
 
-    // Get the smoothed part of the path that will not change
-    this.strPath += ` L${decimal(pt.x)} ${decimal(pt.y)}`
-    // Get the last part of the path (close to the current mouse position)
-    // This part will change if the mouse moves again
-    let tmpPath = ''
-    for (let offset = 2; offset < this.smoothBuffer.length; offset += 2) {
-      pt = this.getAveragePoint(offset)
-      if (pt)
-        tmpPath += ` L${decimal(pt.x)} ${decimal(pt.y)}`
-    }
-    // Set the complete current path coordinates
-    this.el!.setAttribute('d', this.strPath + tmpPath)
-  }
-
-  // Calculate the average point, starting at offset in the buffer
-  getAveragePoint(offset: number): Point | null {
-    const len = this.smoothBuffer.length
-    if (len % 2 === 1 || len >= this.smoothness) {
-      let totalX = 0
-      let totalY = 0
-      let pt, i
-      let count = 0
-      for (i = offset; i < len; i++) {
-        count++
-        pt = this.smoothBuffer[i]
-        totalX += pt.x
-        totalY += pt.y
-      }
-      return {
-        x: totalX / count,
-        y: totalY / count,
-      }
-    }
-    return null
-  }
+function toSvgData(points: Point[]) {
+  return points.reduce((acc, point, i, a) =>
+    i === 0
+      ? `M ${point.x},${point.y}`
+      : `${acc} ${bezierCommand(point, i, a)}`
+  , '')
 }

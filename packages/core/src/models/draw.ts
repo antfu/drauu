@@ -15,6 +15,8 @@ export class DrawModel extends BaseModel<SVGPathElement> {
     if (!this.el)
       return false
 
+    // console.log({ force: point.force })
+
     if (this.points[this.points.length - 1] !== point)
       this.points.push(point)
 

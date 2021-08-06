@@ -40,6 +40,8 @@ export interface Point {
 
 export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
 
+export type InputEvents = MouseEvent | TouchEvent | PointerEvent
+
 export interface Options {
   el?: string | SVGSVGElement
   brush?: Brush

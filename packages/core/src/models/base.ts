@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Drauu } from '../drauu'
-import { Point } from '../types'
+import { InputEvents, Point } from '../types'
 
 export abstract class BaseModel<T extends SVGElement> {
   event: MouseEvent | TouchEvent = undefined!
@@ -35,14 +35,15 @@ export abstract class BaseModel<T extends SVGElement> {
     return this.drauu.altPressed
   }
 
-  getMousePosition(event: MouseEvent | TouchEvent): Point {
+  getMousePosition(event: InputEvents): Point {
     const rect = this.drauu.el!.getBoundingClientRect()
     const scale = this.drauu.options.corrdinateScale ?? 1
 
-    if (event instanceof MouseEvent) {
+    if (event instanceof PointerEvent || event instanceof MouseEvent) {
       return {
         x: (event.pageX - rect.left) * scale,
         y: (event.pageY - rect.top) * scale,
+        force: (event as PointerEvent).pressure,
       }
     }
     if (event instanceof TouchEvent) {

@@ -16,13 +16,11 @@ export interface Brush {
    */
   dasharray?: string
 
-  draw?: {
-    /**
-     * WIP
-     * @default true
-     */
-    pressure?: boolean
-  }
+  /**
+   * @expiremental
+   * @default true
+   */
+  pressure?: boolean
 
   rectangle?: {
     /**

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Drauu } from '../drauu'
 import { InputEvents, Point } from '../types'
+import { D } from '../utils'
 
 export abstract class BaseModel<T extends SVGElement> {
   event: MouseEvent | TouchEvent = undefined!
@@ -70,7 +71,7 @@ export abstract class BaseModel<T extends SVGElement> {
   }
 
   protected attr(name: keyof T, value: string | number) {
-    this.el!.setAttribute(name as string, value.toString())
+    this.el!.setAttribute(name as string, typeof value === 'string' ? value : value.toFixed(D))
   }
 
   private _setEvent(event: MouseEvent | TouchEvent) {

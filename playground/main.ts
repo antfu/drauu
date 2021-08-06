@@ -6,7 +6,8 @@ const drauu = createDrauu({
   el: '#svg',
   brush: {
     color: '#000',
-    size: 2,
+    size: 4,
+    pressure: false,
   },
 })
 
@@ -44,6 +45,12 @@ document.getElementById('undo')?.addEventListener('click', () => drauu.undo())
 document.getElementById('redo')?.addEventListener('click', () => drauu.redo())
 document.getElementById('clear')?.addEventListener('click', () => drauu.clear())
 
+const sizeEl = document.getElementById('size')! as HTMLInputElement
+sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
+
+const pressureEl = document.getElementById('pressure')! as HTMLInputElement
+pressureEl.addEventListener('change', () => drauu.brush.pressure = pressureEl.checked)
+
 const modes: { el: HTMLElement; mode: DrawingMode}[] = [
   { el: document.getElementById('m-draw')!, mode: 'draw' },
   { el: document.getElementById('m-line')!, mode: 'line' },
@@ -55,6 +62,7 @@ modes.forEach(({ el, mode }) => {
     modes.forEach(({ el }) => el.classList.remove('active'))
     el.classList.add('active')
     drauu.mode = mode
+    pressureEl.disabled = mode !== 'draw'
   })
 })
 
@@ -80,6 +88,3 @@ colors
       drauu.brush.color = (i as HTMLElement).dataset.color!
     })
   })
-
-const sizeEl = document.getElementById('size')! as HTMLInputElement
-sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)

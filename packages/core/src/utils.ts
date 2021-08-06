@@ -11,3 +11,7 @@ export function getSymbol(a: number) {
 export function splitNum(a: number) {
   return [Math.abs(a), getSymbol(a)]
 }
+
+export const DECIMAL = 2
+
+export const D = DECIMAL

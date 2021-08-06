@@ -6,21 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <div id="app" class="w-screen h-screen flex flex-col">
-    <div class="p-3 border-b border-gray-200 flex flex-wrap gap-1 children:align-middle children:my-auto">
-      <h1 class="text-xl font-serif opacity-50 mx-4">
-        Drauu
+  <div id="app" class="w-screen h-screen flex flex-col select-none">
+    <div class="px-6 p-3 border-b border-gray-200 flex flex-wrap gap-0.5 children:align-middle children:my-auto">
+      <h1 class="text-xl font-serif mr-2">
+        <a href="https://github.com/antfu-sponsors/drauu" target="_blank" class="font-serif opacity-50 hover:opacity-100">Drauu</a>
       </h1>
-      <div class="mx-5 opacity-25">/</div>
+      <div class="mx-4 opacity-25">/</div>
       <button id="undo">↩️</button>
       <button id="redo">↪️</button>
       <button id="clear">🗑</button>
-      <div class="mx-5 opacity-25">/</div>
+      <div class="mx-4 opacity-25">/</div>
       <button class="active" id="m-draw">✍️</button>
       <button id="m-line">⁄</button>
       <button id="m-rect">⃞</button>
       <button id="m-ellipse">⃝</button>
-      <div class="mx-5 opacity-25">/</div>
+      <div class="mx-4 opacity-25">/</div>
       <button data-color="#000000" class="active">​⚫️​</button>
       <button data-color="#ed153d">​🔴​</button>
       <button data-color="#ed9a26">​🟠​​</button>
@@ -29,18 +29,22 @@
       <button data-color="#2656bf">​​🔵​​</button>
       <button data-color="#c24aed">​🟣​​</button>
       <button data-color="#bf6b26">​​🟤​</button>
-      <div class="mx-5 opacity-25">/</div>
-      <input id="size" type="range" min="1" max="10" value="2" step="0.5" />
-      <div class="mx-5 opacity-25">/</div>
+      <div class="mx-4 opacity-25">/</div>
+      <input id="size" type="range" min="1" max="10" value="4" step="0.5" />
+      <div class="mx-4 opacity-25">/</div>
       <button id="l-solid" class="active">—</button>
       <button id="l-dashed">┅</button>
       <button id="l-dotted">⋯</button>
-      <div class="mx-5 opacity-25">/</div>
-      <a href="https://github.com/antfu-sponsors/drauu" target="_blank" class="font-mono opacity-50 hover:opacity-100">GitHub</a>
-      <button id="pressure"></button>
+      <div class="mx-4 opacity-25">/</div>
+      <label><input id="pressure" type="checkbox" class="translate-y-0.2 transform" /> Pen Pressure</label>
     </div>
     <svg id="svg" class="w-full flex-auto z-10"></svg>
-    <pre class="font-mono fixed right-8 bottom-0 opacity-35 pointer-events-none">
+    <pre class="font-mono fixed left-8 bottom-6 opacity-35 pointer-events-none">
+<b>Drauu</b>
+Headless SVG-based drawboard in browser
+https://github.com/antfu-sponsors/drauu
+</pre>
+    <pre class="font-mono fixed right-8 bottom-6 opacity-35 pointer-events-none <sm:hidden">
            d / free draw
            l / line
            r / rectangle
@@ -49,8 +53,7 @@
            + / increase size
            - / decrease size
       ctrl+z / undo
-shift+ctrl+z / redo
-    </pre>
+shift+ctrl+z / redo</pre>
   </div>
   <script type="module" src="./main.ts"></script>
 </body>

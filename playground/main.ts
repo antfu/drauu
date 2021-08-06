@@ -42,6 +42,7 @@ window.addEventListener('keydown', (e) => {
 
 document.getElementById('undo')?.addEventListener('click', () => drauu.undo())
 document.getElementById('redo')?.addEventListener('click', () => drauu.redo())
+document.getElementById('clear')?.addEventListener('click', () => drauu.clear())
 
 const modes: { el: HTMLElement; mode: DrawingMode}[] = [
   { el: document.getElementById('m-draw')!, mode: 'draw' },
@@ -57,6 +58,19 @@ modes.forEach(({ el, mode }) => {
   })
 })
 
+const lines: { el: HTMLElement; value: string | undefined}[] = [
+  { el: document.getElementById('l-solid')!, value: undefined },
+  { el: document.getElementById('l-dashed')!, value: '4' },
+  { el: document.getElementById('l-dotted')!, value: '1 7' },
+]
+lines.forEach(({ el, value }) => {
+  el.addEventListener('click', () => {
+    lines.forEach(({ el }) => el.classList.remove('active'))
+    el.classList.add('active')
+    drauu.brush.dasharray = value
+  })
+})
+
 const colors = Array.from(document.querySelectorAll('[data-color]'))
 colors
   .forEach((i) => {
@@ -66,3 +80,6 @@ colors
       drauu.brush.color = (i as HTMLElement).dataset.color!
     })
   })
+
+const sizeEl = document.getElementById('size')! as HTMLInputElement
+sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)

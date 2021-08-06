@@ -60,6 +60,7 @@ export abstract class BaseModel<T extends SVGElement> {
     el.setAttribute('stroke', this.brush.color)
     el.setAttribute('stroke-width', this.brush.size.toString())
     el.setAttribute('stroke-linecap', 'round')
+
     if (this.brush.dasharray)
       el.setAttribute('stroke-dasharray', this.brush.dasharray)
 

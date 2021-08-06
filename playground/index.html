@@ -11,8 +11,10 @@
       <h1 class="text-xl font-serif opacity-50 mx-4">
         Drauu
       </h1>
+      <div class="mx-5 opacity-25">/</div>
       <button id="undo">↩️</button>
       <button id="redo">↪️</button>
+      <button id="clear">🗑</button>
       <div class="mx-5 opacity-25">/</div>
       <button class="active" id="m-draw">✍️</button>
       <button id="m-line">📏</button>
@@ -27,6 +29,12 @@
       <button data-color="#2656bf">​​🔵​​</button>
       <button data-color="#c24aed">​🟣​​</button>
       <button data-color="#bf6b26">​​🟤​</button>
+      <div class="mx-5 opacity-25">/</div>
+      <input id="size" type="range" min="1" max="10" value="2" step="0.5" />
+      <div class="mx-5 opacity-25">/</div>
+      <button id="l-solid" class="active">—</button>
+      <button id="l-dashed">┅</button>
+      <button id="l-dotted">⋯</button>
     </div>
     <svg id="svg" class="w-full flex-auto z-10"></svg>
     <pre class="font-mono fixed right-8 bottom-0 opacity-35 pointer-events-none">

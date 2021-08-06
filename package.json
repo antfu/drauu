@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
+    "play:build": "pnpm -C playground run build",
     "js:dev": "pnpm run -r --parallel --filter ./packages dev",
     "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",

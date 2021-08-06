@@ -11,8 +11,8 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.7.0",
-    "@types/node": "^16.4.8",
-    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@types/node": "^16.4.13",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "nanoevents": "^6.0.0",

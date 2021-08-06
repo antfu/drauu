@@ -6,6 +6,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^2.4.4"
+    "vite": "^2.4.4",
+    "vite-plugin-windicss": "^1.2.7"
   }
 }

@@ -4,8 +4,6 @@ import { Brush, Options, DrawingMode, EventsMap } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
-  mode: DrawingMode
-  brush: Brush
   shiftPressed = false
   altPressed = false
 
@@ -16,8 +14,8 @@ export class Drauu {
   private _disposables: (() => void)[] = []
 
   constructor(public options: Options = {}) {
-    this.brush = options.brush || { color: 'black', size: 2 }
-    this.mode = options.mode || 'draw'
+    if (!this.options.brush)
+      this.options.brush = { color: 'black', size: 2 }
     if (options.el)
       this.mount(options.el)
   }
@@ -28,6 +26,22 @@ export class Drauu {
 
   get mounted() {
     return !!this.el
+  }
+
+  get mode() {
+    return this.options.mode || 'draw'
+  }
+
+  set mode(v: DrawingMode) {
+    this.options.mode = v
+  }
+
+  get brush() {
+    return this.options.brush!
+  }
+
+  set brush(v: Brush) {
+    this.options.brush = v
   }
 
   mount(selector: string | SVGSVGElement) {

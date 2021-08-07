@@ -38,20 +38,20 @@ export abstract class BaseModel<T extends SVGElement> {
 
   getMousePosition(event: InputEvents): Point {
     const rect = this.drauu.el!.getBoundingClientRect()
-    const scale = this.drauu.options.corrdinateScale ?? 1
+    const scale = this.drauu.options.coordinateScale ?? 1
 
     if (event instanceof PointerEvent || event instanceof MouseEvent) {
       return {
         x: (event.pageX - rect.left) * scale,
         y: (event.pageY - rect.top) * scale,
-        force: (event as PointerEvent).pressure,
+        pressure: (event as PointerEvent).pressure,
       }
     }
     if (event instanceof TouchEvent) {
       return {
         x: ((event.targetTouches[0]?.pageX || 0) - rect.left) * scale,
         y: ((event.targetTouches[0]?.pageY || 0) - rect.top) * scale,
-        force: event.targetTouches[0]?.force,
+        pressure: event.targetTouches[0]?.force,
       }
     }
     throw new Error('unsupported event type')

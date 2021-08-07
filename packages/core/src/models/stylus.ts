@@ -1,0 +1,65 @@
+import getStroke from 'perfect-freehand'
+import { Point } from '../types'
+import { BaseModel } from './base'
+
+export class StylusModel extends BaseModel<SVGPathElement> {
+  private points: Point[] = []
+
+  override onStart(point: Point) {
+    this.el = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+
+    this.points = [point]
+
+    this.attr('fill', this.brush.color)
+    this.attr('d', this.getSvgData(this.points))
+
+    return this.el
+  }
+
+  override onMove(point: Point) {
+    if (!this.el)
+      return false
+
+    if (this.points[this.points.length - 1] !== point)
+      this.points.push(point)
+
+    this.attr('d', this.getSvgData(this.points))
+    return true
+  }
+
+  override onEnd() {
+    const path = this.el
+    this.el = null
+
+    if (!path)
+      return false
+    return true
+  }
+
+  getSvgData(points: Point[]) {
+    const stroke = getStroke(points, {
+      size: this.brush.size * 2,
+      start: {
+        taper: 5,
+      },
+      end: {
+        taper: 5,
+      },
+      ...this.brush.stylusOptions,
+    })
+
+    if (!stroke.length) return ''
+
+    const d = stroke.reduce(
+      (acc, [x0, y0], i, arr) => {
+        const [x1, y1] = arr[(i + 1) % arr.length]
+        acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2)
+        return acc
+      },
+      ['M', ...stroke[0], 'Q'],
+    )
+
+    d.push('Z')
+    return d.join(' ')
+  }
+}

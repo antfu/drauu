@@ -2,14 +2,17 @@
 
 SVG-based drawing tool in browser.
 
+[Live Demo](http://drauu.netlify.app/)
+
 ## Features
 
 - Vanilla JavaScript - integrate into any framework you like
-- Zero Dependency
-- SVG based
+- SVG-based - scabable, transparent and seraializable
+- Stylus/Touch pressure support 
 - Headless (unstyled) - style it as you want
-- Transparent background - draw on top of dynamic content
-- Undo / Redo
+- Undo / Redo stacks
+- [ ] Eraser
+- [ ] Export to SVG / PNG
 
 ## Install
 

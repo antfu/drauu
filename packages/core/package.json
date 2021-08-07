@@ -25,5 +25,8 @@
     "dev": "nr build --watch",
     "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve",
     "prepublishOnly": "nr build"
+  },
+  "dependencies": {
+    "perfect-freehand": "^0.4.10"
   }
 }

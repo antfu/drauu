@@ -16,7 +16,8 @@
       <button id="redo">↪️</button>
       <button id="clear">🗑</button>
       <div class="mx-4 opacity-25">/</div>
-      <button class="active" id="m-draw">✍️</button>
+      <button class="active" id="m-stylus">✍️</button>
+      <button id="m-draw">✏️</button>
       <button id="m-line">⁄</button>
       <button id="m-arrow">↗</button>
       <button id="m-rect">⃞</button>
@@ -36,8 +37,6 @@
       <button id="l-solid" class="active">—</button>
       <button id="l-dashed">┅</button>
       <button id="l-dotted">⋯</button>
-      <div class="mx-4 opacity-25">/</div>
-      <label><input id="pressure" type="checkbox" class="translate-y-0.2 transform" /> Pen Pressure</label>
     </div>
     <svg id="svg" class="w-full flex-auto z-10"></svg>
     <pre class="font-mono fixed left-8 bottom-6 opacity-35 pointer-events-none">
@@ -46,7 +45,7 @@ Headless SVG-based drawboard in browser
 https://github.com/antfu-sponsors/drauu
 </pre>
     <pre class="font-mono fixed right-8 bottom-6 opacity-35 pointer-events-none <sm:hidden">
-           d / free draw
+           f / freehand
            l / line
            r / rectangle
            e / ellipse

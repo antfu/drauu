@@ -4,36 +4,19 @@ import { createArrowHead } from '../utils/dom'
 import { simplify } from '../utils/simplify'
 import { BaseModel } from './base'
 
-const SEGMENT_LENGTH = 4
-
-export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
+export class DrawModel extends BaseModel<SVGPathElement> {
   private points: Point[] = []
-  private index = 0
   private count = 0
   private arrowId: string | undefined
-  private prevSeg: SVGPathElement | undefined
 
   override onStart(point: Point) {
-    this.el = this.pressure
-      ? document.createElementNS('http://www.w3.org/2000/svg', 'g')
-      : this.createElement('path', { fill: 'transparent' })
-
+    this.el = this.createElement('path', { fill: 'transparent' })
     this.points = [point]
-    this.index = 0
 
     if (this.brush.arrowEnd) {
       this.arrowId = guid()
       const head = createArrowHead(this.arrowId, this.brush.color)
-      if (this.pressure) {
-        this.el.appendChild(head)
-      }
-      else {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        g.append(head)
-        g.append(this.el)
-        this.attr('marker-end', `url(#${this.arrowId})`)
-        return g
-      }
+      this.el.appendChild(head)
     }
 
     return this.el
@@ -50,34 +33,12 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
 
     // when using pressure, we need to divide the path intro multiple segments
     // to have different size and weight in each part
-    if (this.pressure) {
-      while (this.points.length - this.index >= SEGMENT_LENGTH) {
-        const seg = this.createElement('path', { fill: 'transparent' })
-        const points = this.points.slice(this.index, this.index + SEGMENT_LENGTH)
-        const pressure = points
-          .map(i => i.force)
-          .filter(i => i != null)
-          .reduce((a: number, b) => a + b!, 0) / SEGMENT_LENGTH
-
-        seg.setAttribute('d', toSvgData(points))
-        seg.setAttribute('stroke-width', (this.brush.size * pressure * 2).toString())
-        seg.setAttribute('marker-end', `url(#${this.arrowId})`)
-        this.prevSeg?.removeAttribute('marker-end')
-        this.prevSeg = seg
-        // seg.style.setProperty('opacity', Math.min(1, pressure * 2.5).toString())
-        this.el.appendChild(seg)
-        this.index += Math.round(SEGMENT_LENGTH / 2)
-      }
+    if (this.count > 5) {
+      this.points = simplify(this.points, 1, true)
+      this.count = 0
     }
-    // when not using pressure, we just draw the path
-    else {
-      if (this.simplify && this.count > 5) {
-        this.points = simplify(this.points, 1, true)
-        this.count = 0
-      }
 
-      this.attr('d' as any, toSvgData(this.points))
-    }
+    this.attr('d', toSvgData(this.points))
     return true
   }
 
@@ -87,23 +48,13 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
 
     if (!path)
       return false
-    if (this.pressure && !path?.children.length)
-      return false
-    if (!this.pressure && !(path as SVGPathElement).getTotalLength())
-      return false
 
-    if (!this.pressure && this.simplify)
-      path.setAttribute('d' as any, toSvgData(simplify(this.points, 1, true)))
+    path.setAttribute('d', toSvgData(simplify(this.points, 1, true)))
+
+    if (!path.getTotalLength())
+      return false
 
     return true
-  }
-
-  get pressure() {
-    return !!this.brush.pressure
-  }
-
-  get simplify() {
-    return !!this.brush.simplify
   }
 }
 

@@ -1,4 +1,6 @@
-export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
+import { StrokeOptions } from 'perfect-freehand'
+
+export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse'
 
 export interface Brush {
   /**
@@ -29,24 +31,6 @@ export interface Brush {
   dasharray?: string
 
   /**
-   * Read the presure from the given sensor and change the weight of the stroke.
-   * Works only in `draw` mode.
-   *
-   * @expiremental
-   * @default false
-   */
-  pressure?: boolean
-
-  /**
-   * Simplify the points of the lines.
-   * Works only in `draw` mode.
-   *
-   * @expiremental
-   * @default false
-   */
-  simplify?: boolean
-
-  /**
    * Corner radius of the rectangle.
    * Works only in `rectangle` mode.
    *
@@ -61,12 +45,17 @@ export interface Brush {
    * @default false
    */
   arrowEnd?: boolean
+
+  /**
+   * Options for 'perfect-freehand'
+   */
+  stylusOptions?: StrokeOptions
 }
 
 export interface Point {
   x: number
   y: number
-  force?: number
+  pressure?: number
 }
 
 export type InputEvents = MouseEvent | TouchEvent | PointerEvent
@@ -76,9 +65,11 @@ export interface Options {
   brush?: Brush
 
   /**
+   * When you apply a scale transform to the svg container,
+   * set this property to let drauu aware of the currect coordinates.
    * @default 1
    */
-  corrdinateScale?: number
+  coordinateScale?: number
 }
 
 export interface EventsMap {

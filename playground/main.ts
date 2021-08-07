@@ -7,8 +7,6 @@ const drauu = createDrauu({
   brush: {
     color: '#000',
     size: 4,
-    pressure: false,
-    simplify: true,
   },
 })
 
@@ -24,6 +22,9 @@ window.addEventListener('keydown', (e) => {
   }
   else if (e.code === 'KeyD') {
     drauu.mode = 'draw'
+  }
+  else if (e.code === 'KeyS') {
+    drauu.mode = 'stylus'
   }
   else if (e.code === 'KeyR') {
     drauu.mode = 'rectangle'
@@ -49,10 +50,8 @@ document.getElementById('clear')?.addEventListener('click', () => drauu.clear())
 const sizeEl = document.getElementById('size')! as HTMLInputElement
 sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
 
-const pressureEl = document.getElementById('pressure')! as HTMLInputElement
-pressureEl.addEventListener('change', () => drauu.brush.pressure = pressureEl.checked)
-
 const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
+  { el: document.getElementById('m-stylus')!, brush: { mode: 'stylus', arrowEnd: false } },
   { el: document.getElementById('m-draw')!, brush: { mode: 'draw', arrowEnd: false } },
   { el: document.getElementById('m-line')!, brush: { mode: 'line', arrowEnd: false } },
   { el: document.getElementById('m-arrow')!, brush: { mode: 'line', arrowEnd: true } },
@@ -64,7 +63,6 @@ modes.forEach(({ el, brush }) => {
     modes.forEach(({ el }) => el.classList.remove('active'))
     el.classList.add('active')
     Object.assign(drauu.brush, brush)
-    pressureEl.disabled = brush.mode !== 'draw'
   })
 })
 

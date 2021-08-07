@@ -170,19 +170,23 @@ export class Drauu {
 
   private commit() {
     this._undoStack.length = 0
+    const node = this._currentNode
     this._currentNode = undefined
+    this._emitter.emit('committed', node)
   }
 
   clear() {
     this._undoStack.length = 0
     this.cancel()
     this.el!.innerHTML = ''
+    this._emitter.emit('changed')
   }
 
   cancel() {
     if (this._currentNode) {
       this.el!.removeChild(this._currentNode)
       this._currentNode = undefined
+      this._emitter.emit('canceled')
     }
   }
 

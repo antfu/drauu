@@ -84,6 +84,8 @@ export interface Options {
 export interface EventsMap {
   start: () => void
   end: () => void
+  committed: (node: SVGElement | undefined) => void
+  canceled: () => void
   changed: () => void
   mounted: () => void
   unmounted: () => void

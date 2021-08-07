@@ -1,4 +1,11 @@
+export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
+
 export interface Brush {
+  /**
+   * @default 'brush'
+   */
+  mode?: DrawingMode
+
   /**
    * Stroke color
    */
@@ -51,9 +58,9 @@ export interface Brush {
    * Show an arrow at the end of the line.
    * Works only in `draw` and `line` mode.
    *
-   * @default 0
+   * @default false
    */
-  arrowEnd?: number
+  arrowEnd?: boolean
 }
 
 export interface Point {
@@ -62,17 +69,12 @@ export interface Point {
   force?: number
 }
 
-export type DrawingMode = 'draw' | 'line' | 'rectangle' | 'ellipse'
-
 export type InputEvents = MouseEvent | TouchEvent | PointerEvent
 
 export interface Options {
   el?: string | SVGSVGElement
   brush?: Brush
-  /**
-   * @default 'brush'
-   */
-  mode?: DrawingMode
+
   /**
    * @default 1
    */

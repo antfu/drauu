@@ -1,5 +1,5 @@
 import 'virtual:windi.css'
-import { createDrauu, DrawingMode } from 'drauu'
+import { createDrauu, Brush } from 'drauu'
 import './style.css'
 
 const drauu = createDrauu({
@@ -9,7 +9,6 @@ const drauu = createDrauu({
     size: 4,
     pressure: false,
     simplify: true,
-    arrowEnd: 2,
   },
 })
 
@@ -53,18 +52,19 @@ sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
 const pressureEl = document.getElementById('pressure')! as HTMLInputElement
 pressureEl.addEventListener('change', () => drauu.brush.pressure = pressureEl.checked)
 
-const modes: { el: HTMLElement; mode: DrawingMode}[] = [
-  { el: document.getElementById('m-draw')!, mode: 'draw' },
-  { el: document.getElementById('m-line')!, mode: 'line' },
-  { el: document.getElementById('m-rect')!, mode: 'rectangle' },
-  { el: document.getElementById('m-ellipse')!, mode: 'ellipse' },
+const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
+  { el: document.getElementById('m-draw')!, brush: { mode: 'draw', arrowEnd: false } },
+  { el: document.getElementById('m-line')!, brush: { mode: 'line', arrowEnd: false } },
+  { el: document.getElementById('m-arrow')!, brush: { mode: 'line', arrowEnd: true } },
+  { el: document.getElementById('m-rect')!, brush: { mode: 'rectangle', arrowEnd: false } },
+  { el: document.getElementById('m-ellipse')!, brush: { mode: 'ellipse', arrowEnd: false } },
 ]
-modes.forEach(({ el, mode }) => {
+modes.forEach(({ el, brush }) => {
   el.addEventListener('click', () => {
     modes.forEach(({ el }) => el.classList.remove('active'))
     el.classList.add('active')
-    drauu.mode = mode
-    pressureEl.disabled = mode !== 'draw'
+    Object.assign(drauu.brush, brush)
+    pressureEl.disabled = brush.mode !== 'draw'
   })
 })
 

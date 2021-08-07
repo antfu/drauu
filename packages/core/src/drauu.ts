@@ -15,7 +15,7 @@ export class Drauu {
 
   constructor(public options: Options = {}) {
     if (!this.options.brush)
-      this.options.brush = { color: 'black', size: 2 }
+      this.options.brush = { color: 'black', size: 3, mode: 'draw' }
     if (options.el)
       this.mount(options.el)
   }
@@ -29,11 +29,11 @@ export class Drauu {
   }
 
   get mode() {
-    return this.options.mode || 'draw'
+    return this.options.brush!.mode || 'draw'
   }
 
   set mode(v: DrawingMode) {
-    this.options.mode = v
+    this.options.brush!.mode = v
   }
 
   get brush() {

@@ -3,7 +3,7 @@ import { BaseModel } from './base'
 
 export class LineModel extends BaseModel<SVGLineElement> {
   override onStart(point: Point) {
-    this.el = this.createElement('line')
+    this.el = this.createElement('line', { fill: 'transparent' })
 
     this.attr('x1', point.x)
     this.attr('y1', point.y)

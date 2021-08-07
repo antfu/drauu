@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Brush } from '../types'
 import { Drauu } from '../drauu'
 import { InputEvents, Point } from '../types'
 import { D } from '../utils'
@@ -9,8 +10,7 @@ export abstract class BaseModel<T extends SVGElement> {
   start: Point = undefined!
   el: T | null = null
 
-  constructor(private drauu: Drauu) {
-  }
+  constructor(private drauu: Drauu) {}
 
   onStart(point: Point): SVGElement | undefined {
     return undefined
@@ -57,15 +57,22 @@ export abstract class BaseModel<T extends SVGElement> {
     throw new Error('unsupported event type')
   }
 
-  protected createElement<K extends keyof SVGElementTagNameMap>(name: K): SVGElementTagNameMap[K] {
+  protected createElement<K extends keyof SVGElementTagNameMap>(name: K, overrides?: Partial<Brush>): SVGElementTagNameMap[K] {
     const el = document.createElementNS('http://www.w3.org/2000/svg', name)
-    el.setAttribute('fill', this.brush.fill ?? 'transparent')
-    el.setAttribute('stroke', this.brush.color)
-    el.setAttribute('stroke-width', this.brush.size.toString())
+    const brush = overrides
+      ? {
+        ...this.brush,
+        ...overrides,
+      }
+      : this.brush
+
+    el.setAttribute('fill', brush.fill ?? 'transparent')
+    el.setAttribute('stroke', brush.color)
+    el.setAttribute('stroke-width', brush.size.toString())
     el.setAttribute('stroke-linecap', 'round')
 
-    if (this.brush.dasharray)
-      el.setAttribute('stroke-dasharray', this.brush.dasharray)
+    if (brush.dasharray)
+      el.setAttribute('stroke-dasharray', brush.dasharray)
 
     return el
   }

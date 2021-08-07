@@ -1,6 +1,6 @@
 import { Point } from '../types'
 import { D } from '../utils'
-import { simplify } from '../utils/simpify'
+import { simplify } from '../utils/simplify'
 import { BaseModel } from './base'
 
 const SEGMENT_LENGTH = 4
@@ -12,8 +12,8 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
 
   override onStart(point: Point) {
     this.el = this.pressure
-      ? this.createElement('g')
-      : this.createElement('path')
+      ? this.createElement('g', { fill: 'transparent' })
+      : this.createElement('path', { fill: 'transparent' })
 
     this.points = [point]
     this.index = 0
@@ -34,7 +34,7 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
     // to have different size and weight in each part
     if (this.pressure) {
       while (this.points.length - this.index >= SEGMENT_LENGTH) {
-        const seg = this.createElement('path')
+        const seg = this.createElement('path', { fill: 'transparent' })
         const points = this.points.slice(this.index, this.index + SEGMENT_LENGTH)
         const pressure = points
           .map(i => i.force)

@@ -27,10 +27,7 @@ importers:
       typescript: 4.3.5
 
   packages/core:
-    specifiers:
-      nanoid: ^3.1.23
-    devDependencies:
-      nanoid: 3.1.23
+    specifiers: {}
 
   packages/drauu:
     specifiers:

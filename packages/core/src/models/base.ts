@@ -77,8 +77,8 @@ export abstract class BaseModel<T extends SVGElement> {
     return el
   }
 
-  protected attr(name: keyof T, value: string | number) {
-    this.el!.setAttribute(name as string, typeof value === 'string' ? value : value.toFixed(D))
+  protected attr(name: string, value: string | number) {
+    this.el!.setAttribute(name, typeof value === 'string' ? value : value.toFixed(D))
   }
 
   private _setEvent(event: MouseEvent | TouchEvent) {

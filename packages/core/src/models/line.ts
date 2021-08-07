@@ -1,4 +1,6 @@
 import { Point } from '../types'
+import { guid } from '../utils'
+import { createArrowHead } from '../utils/dom'
 import { BaseModel } from './base'
 
 export class LineModel extends BaseModel<SVGLineElement> {
@@ -9,6 +11,15 @@ export class LineModel extends BaseModel<SVGLineElement> {
     this.attr('y1', point.y)
     this.attr('x2', point.x)
     this.attr('y2', point.y)
+
+    if (this.brush.arrowEnd) {
+      const id = guid()
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      g.append(createArrowHead(id, this.brush.color))
+      g.append(this.el)
+      this.attr('marker-end', `url(#${id})`)
+      return g
+    }
 
     return this.el
   }
@@ -58,7 +69,7 @@ export class LineModel extends BaseModel<SVGLineElement> {
 
     if (!path)
       return false
-    if (!path.getTotalLength())
+    if (path.getTotalLength() < 5)
       return false
 
     return true

@@ -1,5 +1,6 @@
 import { Point } from '../types'
-import { D } from '../utils'
+import { D, guid } from '../utils'
+import { createArrowHead } from '../utils/dom'
 import { simplify } from '../utils/simplify'
 import { BaseModel } from './base'
 
@@ -9,14 +10,31 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
   private points: Point[] = []
   private index = 0
   private count = 0
+  private arrowId: string | undefined
+  private prevSeg: SVGPathElement | undefined
 
   override onStart(point: Point) {
     this.el = this.pressure
-      ? this.createElement('g', { fill: 'transparent' })
+      ? document.createElementNS('http://www.w3.org/2000/svg', 'g')
       : this.createElement('path', { fill: 'transparent' })
 
     this.points = [point]
     this.index = 0
+
+    if (this.brush.arrowEnd) {
+      this.arrowId = guid()
+      const head = createArrowHead(this.arrowId, this.brush.color)
+      if (this.pressure) {
+        this.el.appendChild(head)
+      }
+      else {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        g.append(head)
+        g.append(this.el)
+        this.attr('marker-end', `url(#${this.arrowId})`)
+        return g
+      }
+    }
 
     return this.el
   }
@@ -43,6 +61,9 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
 
         seg.setAttribute('d', toSvgData(points))
         seg.setAttribute('stroke-width', (this.brush.size * pressure * 2).toString())
+        seg.setAttribute('marker-end', `url(#${this.arrowId})`)
+        this.prevSeg?.removeAttribute('marker-end')
+        this.prevSeg = seg
         // seg.style.setProperty('opacity', Math.min(1, pressure * 2.5).toString())
         this.el.appendChild(seg)
         this.index += Math.round(SEGMENT_LENGTH / 2)
@@ -61,9 +82,6 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
   }
 
   override onEnd() {
-    if (!this.pressure && this.simplify)
-      this.attr('d' as any, toSvgData(simplify(this.points, 1, true)))
-
     const path = this.el
     this.el = null
 
@@ -73,6 +91,9 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
       return false
     if (!this.pressure && !(path as SVGPathElement).getTotalLength())
       return false
+
+    if (!this.pressure && this.simplify)
+      path.setAttribute('d' as any, toSvgData(simplify(this.points, 1, true)))
 
     return true
   }

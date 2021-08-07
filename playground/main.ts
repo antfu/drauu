@@ -9,6 +9,7 @@ const drauu = createDrauu({
     size: 4,
     pressure: false,
     simplify: true,
+    arrowEnd: 2,
   },
 })
 

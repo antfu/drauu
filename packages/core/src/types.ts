@@ -46,6 +46,14 @@ export interface Brush {
    * @default 0
    */
   cornerRadius?: number
+
+  /**
+   * Show an arrow at the end of the line.
+   * Works only in `draw` and `line` mode.
+   *
+   * @default 0
+   */
+  arrowEnd?: number
 }
 
 export interface Point {

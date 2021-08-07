@@ -137,6 +137,8 @@ export class Drauu {
   private eventStart(event: MouseEvent | TouchEvent) {
     event.stopPropagation()
     event.preventDefault()
+    if (this._currentNode)
+      this.cancel()
     this._emitter.emit('start')
     this._currentNode = this.model._eventDown(event)
     if (this._currentNode)

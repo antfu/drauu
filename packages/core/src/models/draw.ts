@@ -78,11 +78,11 @@ export class DrawModel extends BaseModel<SVGGElement | SVGPathElement> {
   }
 
   get pressure() {
-    return !!this.brush.draw?.pressure
+    return !!this.brush.pressure
   }
 
   get simplify() {
-    return !!this.brush.draw?.simplify
+    return !!this.brush.simplify
   }
 }
 

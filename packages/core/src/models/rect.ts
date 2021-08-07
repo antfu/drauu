@@ -6,9 +6,9 @@ export class RectModel extends BaseModel<SVGRectElement> {
   override onStart(point: Point) {
     this.el = this.createElement('rect')
 
-    if (this.brush.rectangle?.radius) {
-      this.attr('rx', this.brush.rectangle.radius)
-      this.attr('ry', this.brush.rectangle.radius)
+    if (this.brush.cornerRadius) {
+      this.attr('rx', this.brush.cornerRadius)
+      this.attr('ry', this.brush.cornerRadius)
     }
 
     this.attr('x', point.x)

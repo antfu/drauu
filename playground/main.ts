@@ -7,10 +7,8 @@ const drauu = createDrauu({
   brush: {
     color: '#000',
     size: 4,
-    draw: {
-      pressure: false,
-      simplify: true,
-    },
+    pressure: false,
+    simplify: true,
   },
 })
 
@@ -52,7 +50,7 @@ const sizeEl = document.getElementById('size')! as HTMLInputElement
 sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
 
 const pressureEl = document.getElementById('pressure')! as HTMLInputElement
-pressureEl.addEventListener('change', () => drauu.brush.draw!.pressure = pressureEl.checked)
+pressureEl.addEventListener('change', () => drauu.brush.pressure = pressureEl.checked)
 
 const modes: { el: HTMLElement; mode: DrawingMode}[] = [
   { el: document.getElementById('m-draw')!, mode: 'draw' },

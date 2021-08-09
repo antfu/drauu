@@ -39,6 +39,8 @@ export class StylusModel extends BaseModel<SVGPathElement> {
   getSvgData(points: Point[]) {
     const stroke = getStroke(points, {
       size: this.brush.size * 2,
+      thinning: 0.9,
+      simulatePressure: false,
       start: {
         taper: 5,
       },

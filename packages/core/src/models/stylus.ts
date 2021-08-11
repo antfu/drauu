@@ -62,6 +62,6 @@ export class StylusModel extends BaseModel<SVGPathElement> {
     )
 
     d.push('Z')
-    return d.join(' ')
+    return d.map(i => typeof i === 'number' ? i.toFixed(2) : i).join(' ')
   }
 }

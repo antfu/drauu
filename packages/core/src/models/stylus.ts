@@ -18,7 +18,7 @@ export class StylusModel extends BaseModel<SVGPathElement> {
 
   override onMove(point: Point) {
     if (!this.el)
-      return false
+      this.onStart(point)
 
     if (this.points[this.points.length - 1] !== point)
       this.points.push(point)

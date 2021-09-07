@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-beta.5",
+  "version": "0.1.0-beta.6",
   "private": true,
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",

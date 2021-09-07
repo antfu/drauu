@@ -1,4 +1,4 @@
-import { StrokeOptions } from 'perfect-freehand'
+import type { StrokeOptions } from 'perfect-freehand'
 
 export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse'
 
@@ -63,6 +63,13 @@ export type InputEvents = MouseEvent | TouchEvent | PointerEvent
 export interface Options {
   el?: string | SVGSVGElement
   brush?: Brush
+
+  /**
+   * Filter out events based on input type
+   *
+   * @default ['mouse', 'touch', 'pen']
+   */
+  acceptsInputTypes?: ('mouse' | 'touch' | 'pen')[]
 
   /**
    * When you apply a scale transform to the svg container,

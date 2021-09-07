@@ -8,6 +8,7 @@ const drauu = createDrauu({
     color: '#000',
     size: 4,
   },
+  // acceptsInputTypes: ['pen'],
 })
 
 window.addEventListener('keydown', (e) => {
@@ -71,6 +72,7 @@ const lines: { el: HTMLElement; value: string | undefined}[] = [
   { el: document.getElementById('l-dashed')!, value: '4' },
   { el: document.getElementById('l-dotted')!, value: '1 7' },
 ]
+
 lines.forEach(({ el, value }) => {
   el.addEventListener('click', () => {
     lines.forEach(({ el }) => el.classList.remove('active'))

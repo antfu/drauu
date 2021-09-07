@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <style>
+    body, html {
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0
+    }
+  </style>
   <div id="app" class="w-screen h-screen flex flex-col select-none">
     <div class="px-6 p-3 border-b border-gray-200 flex flex-wrap gap-0.5 children:align-middle children:my-auto">
       <h1 class="text-xl font-serif mr-2">
@@ -38,7 +46,7 @@
       <button id="l-dashed">┅</button>
       <button id="l-dotted">⋯</button>
     </div>
-    <svg id="svg" class="w-full flex-auto z-10"></svg>
+    <svg id="svg" class="w-full flex-auto z-10" style="touch-action: none"></svg>
     <pre class="font-mono fixed left-8 bottom-6 opacity-35 pointer-events-none">
 <b>Drauu</b>
 Headless SVG-based drawboard in browser

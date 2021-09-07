@@ -65,22 +65,18 @@ export class Drauu {
     const end = this.eventEnd.bind(this)
     const keyboard = this.eventKeyboard.bind(this)
 
-    el.addEventListener('pointerdown', start, false)
-    el.addEventListener('touchstart', start, false)
-    el.addEventListener('pointermove', move, false)
-    el.addEventListener('touchmove', move, false)
-    el.addEventListener('pointerup', end, false)
-    el.addEventListener('touchend', end, false)
+    el.addEventListener('pointerdown', start, { passive: false })
+    el.addEventListener('pointermove', move, { passive: false })
+    el.addEventListener('pointerup', end, { passive: false })
+    el.addEventListener('pointercancel', end, { passive: false })
     window.addEventListener('keydown', keyboard, false)
     window.addEventListener('keyup', keyboard, false)
 
     this._disposables.push(() => {
-      el.removeEventListener('mousedown', start, false)
-      el.removeEventListener('touchstart', start, false)
-      el.removeEventListener('mousemove', move, false)
-      el.removeEventListener('touchmove', move, false)
-      el.removeEventListener('mouseup', end, false)
-      el.removeEventListener('touchend', end, false)
+      el.removeEventListener('pointerdown', start)
+      el.removeEventListener('pointermove', move)
+      el.removeEventListener('pointerup', end)
+      el.removeEventListener('pointercancel', end)
       window.removeEventListener('keydown', keyboard, false)
       window.removeEventListener('keyup', keyboard, false)
     })
@@ -126,7 +122,9 @@ export class Drauu {
     return !!this.el?.lastElementChild
   }
 
-  private eventMove(event: MouseEvent | TouchEvent) {
+  private eventMove(event: PointerEvent) {
+    if (!this.acceptsInput(event))
+      return
     if (this.model._eventMove(event)) {
       event.stopPropagation()
       event.preventDefault()
@@ -134,7 +132,9 @@ export class Drauu {
     }
   }
 
-  private eventStart(event: MouseEvent | TouchEvent) {
+  private eventStart(event: PointerEvent) {
+    if (!this.acceptsInput(event))
+      return
     event.stopPropagation()
     event.preventDefault()
     if (this._currentNode)
@@ -146,7 +146,9 @@ export class Drauu {
     this._emitter.emit('changed')
   }
 
-  private eventEnd(event: MouseEvent | TouchEvent) {
+  private eventEnd(event: PointerEvent) {
+    if (!this.acceptsInput(event))
+      return
     const result = this.model._eventUp(event)
     if (!result) {
       this.cancel()
@@ -158,6 +160,11 @@ export class Drauu {
     }
     this._emitter.emit('end')
     this._emitter.emit('changed')
+  }
+
+  private acceptsInput(event: PointerEvent) {
+    return !this.options.acceptsInputTypes
+    || this.options.acceptsInputTypes.includes(event.pointerType as any)
   }
 
   private eventKeyboard(event: KeyboardEvent) {

@@ -125,6 +125,7 @@ export class Drauu {
   private eventMove(event: PointerEvent) {
     if (!this.acceptsInput(event))
       return
+
     if (this.model._eventMove(event)) {
       event.stopPropagation()
       event.preventDefault()

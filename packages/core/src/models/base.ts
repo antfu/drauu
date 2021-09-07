@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Brush } from '../types'
 import { Drauu } from '../drauu'
-import { InputEvents, Point } from '../types'
+import { Point } from '../types'
 import { D } from '../utils'
 
 export abstract class BaseModel<T extends SVGElement> {
-  event: MouseEvent | TouchEvent = undefined!
+  event: PointerEvent = undefined!
   point: Point = undefined!
   start: Point = undefined!
   el: T | null = null
@@ -36,25 +36,15 @@ export abstract class BaseModel<T extends SVGElement> {
     return this.drauu.altPressed
   }
 
-  getMousePosition(event: InputEvents): Point {
+  getMousePosition(event: PointerEvent): Point {
     const rect = this.drauu.el!.getBoundingClientRect()
     const scale = this.drauu.options.coordinateScale ?? 1
 
-    if (event instanceof PointerEvent || event instanceof MouseEvent) {
-      return {
-        x: (event.pageX - rect.left) * scale,
-        y: (event.pageY - rect.top) * scale,
-        pressure: (event as PointerEvent).pressure,
-      }
+    return {
+      x: (event.pageX - rect.left) * scale,
+      y: (event.pageY - rect.top) * scale,
+      pressure: event.pressure,
     }
-    if (event instanceof TouchEvent) {
-      return {
-        x: ((event.targetTouches[0]?.pageX || 0) - rect.left) * scale,
-        y: ((event.targetTouches[0]?.pageY || 0) - rect.top) * scale,
-        pressure: event.targetTouches[0]?.force,
-      }
-    }
-    throw new Error('unsupported event type')
   }
 
   protected createElement<K extends keyof SVGElementTagNameMap>(name: K, overrides?: Partial<Brush>): SVGElementTagNameMap[K] {
@@ -81,7 +71,7 @@ export abstract class BaseModel<T extends SVGElement> {
     this.el!.setAttribute(name, typeof value === 'string' ? value : value.toFixed(D))
   }
 
-  private _setEvent(event: MouseEvent | TouchEvent) {
+  private _setEvent(event: PointerEvent) {
     this.event = event
     this.point = this.getMousePosition(event)
   }
@@ -89,7 +79,7 @@ export abstract class BaseModel<T extends SVGElement> {
   /**
    * @internal
    */
-  _eventDown(event: MouseEvent | TouchEvent) {
+  _eventDown(event: PointerEvent) {
     this._setEvent(event)
     this.start = this.point
     return this.onStart(this.point)
@@ -98,7 +88,7 @@ export abstract class BaseModel<T extends SVGElement> {
   /**
    * @internal
    */
-  _eventMove(event: MouseEvent | TouchEvent) {
+  _eventMove(event: PointerEvent) {
     this._setEvent(event)
     return this.onMove(this.point)
   }
@@ -106,7 +96,7 @@ export abstract class BaseModel<T extends SVGElement> {
   /**
    * @internal
    */
-  _eventUp(event: MouseEvent | TouchEvent) {
+  _eventUp(event: PointerEvent) {
     this._setEvent(event)
     return this.onEnd(this.point)
   }

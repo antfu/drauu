@@ -58,8 +58,6 @@ export interface Point {
   pressure?: number
 }
 
-export type InputEvents = MouseEvent | TouchEvent | PointerEvent
-
 export interface Options {
   el?: string | SVGSVGElement
   brush?: Brush

@@ -4,6 +4,7 @@ import { Brush, Options, DrawingMode, EventsMap } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
+  eventEl: Element | null = null
   shiftPressed = false
   altPressed = false
 
@@ -17,7 +18,7 @@ export class Drauu {
     if (!this.options.brush)
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
-      this.mount(options.el)
+      this.mount(options.el, options.eventTarget)
   }
 
   get model() {
@@ -44,39 +45,43 @@ export class Drauu {
     this.options.brush = v
   }
 
-  mount(selector: string | SVGSVGElement) {
+  resolveSelector<T>(selector: string | T | null | undefined): T | null {
+    if (typeof selector === 'string')
+      return document.querySelector(selector) as unknown as T
+    else
+      return selector || null
+  }
+
+  mount(el: string | SVGSVGElement, eventEl?: string | Element) {
     if (this.el)
       throw new Error('[drauu] already mounted, unmount previous target first')
 
-    if (typeof selector === 'string')
-      this.el = document.querySelector(selector)
-    else
-      this.el = selector
+    this.el = this.resolveSelector(el)
 
     if (!this.el)
       throw new Error('[drauu] target element not found')
     if (this.el.tagName !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
 
-    const el = this.el
+    const target: SVGSVGElement = this.resolveSelector(eventEl as any) || this.el!
 
     const start = this.eventStart.bind(this)
     const move = this.eventMove.bind(this)
     const end = this.eventEnd.bind(this)
     const keyboard = this.eventKeyboard.bind(this)
 
-    el.addEventListener('pointerdown', start, { passive: false })
-    el.addEventListener('pointermove', move, { passive: false })
-    el.addEventListener('pointerup', end, { passive: false })
-    el.addEventListener('pointercancel', end, { passive: false })
+    target.addEventListener('pointerdown', start, { passive: false })
+    target.addEventListener('pointermove', move, { passive: false })
+    target.addEventListener('pointerup', end, { passive: false })
+    target.addEventListener('pointercancel', end, { passive: false })
     window.addEventListener('keydown', keyboard, false)
     window.addEventListener('keyup', keyboard, false)
 
     this._disposables.push(() => {
-      el.removeEventListener('pointerdown', start)
-      el.removeEventListener('pointermove', move)
-      el.removeEventListener('pointerup', end)
-      el.removeEventListener('pointercancel', end)
+      target.removeEventListener('pointerdown', start)
+      target.removeEventListener('pointermove', move)
+      target.removeEventListener('pointerup', end)
+      target.removeEventListener('pointercancel', end)
       window.removeEventListener('keydown', keyboard, false)
       window.removeEventListener('keyup', keyboard, false)
     })

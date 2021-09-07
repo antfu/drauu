@@ -60,6 +60,7 @@ export interface Point {
 
 export interface Options {
   el?: string | SVGSVGElement
+
   brush?: Brush
 
   /**
@@ -68,6 +69,13 @@ export interface Options {
    * @default ['mouse', 'touch', 'pen']
    */
   acceptsInputTypes?: ('mouse' | 'touch' | 'pen')[]
+
+  /**
+   * Use different element to listen on the events
+   *
+   * @default the `el` option
+   */
+  eventTarget?: string | Element
 
   /**
    * When you apply a scale transform to the svg container,

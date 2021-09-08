@@ -1,17 +1,18 @@
 # drauu
 
-SVG-based drawing tool in browser.
+[![NPM version](https://img.shields.io/npm/v/drauu?color=a1b858&label=)](https://www.npmjs.com/package/drauu)
 
-[Live Demo](http://drauu.netlify.app/)
+SVG-based drawing tool in browser. Built for [Slidev](https://github.com/slidevjs/slidev).
+
+[Live Demo](http://drauu.netlify.app/) (built with Vanilla JavaScript!)
 
 ## Features
 
 - Vanilla JavaScript - integrate into any framework you like
-- SVG-based - scabable, transparent and seraializable
+- SVG-based - scalable, transparent and serializable
 - Stylus/Touch pressure support 
 - Headless (unstyled) - style it as you want
 - Undo / Redo stacks
-- [ ] Eraser
 - [ ] Export to SVG / PNG
 
 ## Install

@@ -174,11 +174,15 @@ export class Drauu {
   }
 
   private eventKeyboard(event: KeyboardEvent) {
+    if (this.shiftPressed === event.shiftKey && this.altPressed === event.altKey)
+      return
     this.shiftPressed = event.shiftKey
     this.altPressed = event.altKey
     // redraw
-    this.model.onMove(this.model.point)
-    this._emitter.emit('changed')
+    if (this.model.point) {
+      if (this.model.onMove(this.model.point))
+        this._emitter.emit('changed')
+    }
   }
 
   private commit() {

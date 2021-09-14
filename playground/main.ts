@@ -51,6 +51,17 @@ window.addEventListener('keydown', (e) => {
 document.getElementById('undo')?.addEventListener('click', () => drauu.undo())
 document.getElementById('redo')?.addEventListener('click', () => drauu.redo())
 document.getElementById('clear')?.addEventListener('click', () => drauu.clear())
+document.getElementById('download')?.addEventListener('click', () => {
+  drauu.el!.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+  const data = drauu.el!.outerHTML || ''
+  const blob = new Blob([data], { type: 'image/svg+xml' })
+  const elem = window.document.createElement('a')
+  elem.href = window.URL.createObjectURL(blob)
+  elem.download = 'drauu.svg'
+  document.body.appendChild(elem)
+  elem.click()
+  document.body.removeChild(elem)
+})
 
 const sizeEl = document.getElementById('size')! as HTMLInputElement
 sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)

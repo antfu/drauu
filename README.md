@@ -13,7 +13,6 @@ SVG-based drawing tool in browser. Built for [Slidev](https://github.com/slidevj
 - Stylus/Touch pressure support 
 - Headless (unstyled) - style it as you want
 - Undo / Redo stacks
-- [ ] Export to SVG / PNG
 
 ## Install
 

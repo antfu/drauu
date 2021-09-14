@@ -38,11 +38,11 @@ export abstract class BaseModel<T extends SVGElement> {
 
   getMousePosition(event: PointerEvent): Point {
     const el = this.drauu.el!
-    const pt = this.drauu.elPoint!
+    const point = this.drauu.svgPoint!
     const scale = this.drauu.options.coordinateScale ?? 1
-    pt.x = event.clientX
-    pt.y = event.clientY
-    const loc = pt.matrixTransform(el.getScreenCTM()?.inverse())
+    point.x = event.clientX
+    point.y = event.clientY
+    const loc = point.matrixTransform(el.getScreenCTM()?.inverse())
     return {
       x: loc.x * scale,
       y: loc.y * scale,

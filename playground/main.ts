@@ -17,31 +17,35 @@ window.addEventListener('keydown', (e) => {
       drauu.redo()
     else
       drauu.undo()
+    return
   }
-  else if (e.code === 'KeyL') {
+
+  if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey)
+    return
+
+  if (e.code === 'KeyL')
     drauu.mode = 'line'
-  }
-  else if (e.code === 'KeyD') {
+
+  else if (e.code === 'KeyD')
     drauu.mode = 'draw'
-  }
-  else if (e.code === 'KeyS') {
+
+  else if (e.code === 'KeyS')
     drauu.mode = 'stylus'
-  }
-  else if (e.code === 'KeyR') {
+
+  else if (e.code === 'KeyR')
     drauu.mode = 'rectangle'
-  }
-  else if (e.code === 'KeyE') {
+
+  else if (e.code === 'KeyE')
     drauu.mode = 'ellipse'
-  }
-  else if (e.code === 'KeyC') {
+
+  else if (e.code === 'KeyC')
     drauu.clear()
-  }
-  else if (e.code === 'Equal') {
+
+  else if (e.code === 'Equal')
     drauu.brush.size += 0.5
-  }
-  else if (e.code === 'Minus') {
+
+  else if (e.code === 'Minus')
     drauu.brush.size -= 0.5
-  }
 })
 
 document.getElementById('undo')?.addEventListener('click', () => drauu.undo())

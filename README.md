@@ -28,7 +28,14 @@ npm i drauu
 ```js
 import { createDrauu } from 'drauu'
 
-const drauu = createDrauu({ el: '#svg' })
+const drauu = createDrauu({ 
+  el: '#svg',
+  brush: {
+    mode: 'stylus', // 'line', 'reactangle', 'ellipse'
+    color: 'skyblue',
+    size: 5,
+  }
+})
 ```
 
 ## Credits

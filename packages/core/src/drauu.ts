@@ -4,6 +4,7 @@ import { Brush, Options, DrawingMode, EventsMap } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
+  elPoint: DOMPoint | null = null
   eventEl: Element | null = null
   shiftPressed = false
   altPressed = false
@@ -62,6 +63,8 @@ export class Drauu {
       throw new Error('[drauu] target element not found')
     if (this.el.tagName !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
+
+    this.elPoint = this.el.createSVGPoint()
 
     const target: SVGSVGElement = this.resolveSelector(eventEl as any) || this.el!
 

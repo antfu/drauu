@@ -71,17 +71,17 @@ export class Drauu {
     const keyboard = this.eventKeyboard.bind(this)
 
     target.addEventListener('pointerdown', start, { passive: false })
-    target.addEventListener('pointermove', move, { passive: false })
-    target.addEventListener('pointerup', end, { passive: false })
-    target.addEventListener('pointercancel', end, { passive: false })
+    window.addEventListener('pointermove', move, { passive: false })
+    window.addEventListener('pointerup', end, { passive: false })
+    window.addEventListener('pointercancel', end, { passive: false })
     window.addEventListener('keydown', keyboard, false)
     window.addEventListener('keyup', keyboard, false)
 
     this._disposables.push(() => {
       target.removeEventListener('pointerdown', start)
-      target.removeEventListener('pointermove', move)
-      target.removeEventListener('pointerup', end)
-      target.removeEventListener('pointercancel', end)
+      window.removeEventListener('pointermove', move)
+      window.removeEventListener('pointerup', end)
+      window.removeEventListener('pointercancel', end)
       window.removeEventListener('keydown', keyboard, false)
       window.removeEventListener('keyup', keyboard, false)
     })

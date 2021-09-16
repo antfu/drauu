@@ -20,33 +20,33 @@
         <a href="https://github.com/antfu-sponsors/drauu" target="_blank" class="font-serif opacity-50 hover:opacity-100">Drauu</a>
       </h1>
       <div class="mx-4 opacity-25">/</div>
-      <button id="undo">↩️</button>
-      <button id="redo">↪️</button>
-      <button id="clear">🗑</button>
+      <button id="undo" aria-label="Undo" title="Undo">↩️</button>
+      <button id="redo" aria-label="Redo" title="Redo">↪️</button>
+      <button id="clear" aria-label="Clear" title="Clear">🗑</button>
       <div class="mx-4 opacity-25">/</div>
-      <button class="active" id="m-stylus">✍️</button>
-      <button id="m-draw">✏️</button>
-      <button id="m-line">⁄</button>
-      <button id="m-arrow">↗</button>
-      <button id="m-rect">⃞</button>
-      <button id="m-ellipse">⃝</button>
+      <button class="active" id="m-stylus" aria-label="Stylus" title="Stylus">✍️</button>
+      <button id="m-draw" aria-label="Draw" title="Draw">✏️</button>
+      <button id="m-line" aria-label="Line" title="Line">⁄</button>
+      <button id="m-arrow" aria-label="Arrow" title="Arrow">↗</button>
+      <button id="m-rect" aria-label="Rect" title="Rect">⃞</button>
+      <button id="m-ellipse" aria-label="Ellipse" title="Ellipse">⃝</button>
       <div class="mx-4 opacity-25">/</div>
       <button data-color="#000000" class="active">​⚫️​</button>
-      <button data-color="#ed153d">​🔴​</button>
-      <button data-color="#ed9a26">​🟠​​</button>
-      <button data-color="#ede215">​​🟡​​</button>
-      <button data-color="#30bd20">​🟢​​</button>
-      <button data-color="#2656bf">​​🔵​​</button>
-      <button data-color="#c24aed">​🟣​​</button>
-      <button data-color="#bf6b26">​​🟤​</button>
+      <button data-color="#ed153d" aria-label="Red" title="Red">​🔴​</button>
+      <button data-color="#ed9a26" aria-label="Orange" title="Orange">​🟠​​</button>
+      <button data-color="#ede215" aria-label="Yellow" title="Yellow">​​🟡​​</button>
+      <button data-color="#30bd20" aria-label="Green" title="Green">​🟢​​</button>
+      <button data-color="#2656bf" aria-label="Blue" title="Blue">​​🔵​​</button>
+      <button data-color="#c24aed" aria-label="Purple" title="Purple">​🟣​​</button>
+      <button data-color="#bf6b26" aria-label="Brown" title="Brown">​​🟤​</button>
       <div class="mx-4 opacity-25">/</div>
-      <input id="size" type="range" min="1" max="10" value="4" step="0.5" />
+      <input id="size" type="range" min="1" max="10" value="4" step="0.5" name="Size" title="Size"/>
       <div class="mx-4 opacity-25">/</div>
-      <button id="l-solid" class="active">—</button>
-      <button id="l-dashed">┅</button>
-      <button id="l-dotted">⋯</button>
+      <button id="l-solid" class="active" aria-label="Solid" title="Solid">—</button>
+      <button id="l-dashed" aria-label="Dashed" title="Dashed">┅</button>
+      <button id="l-dotted" aria-label="Dotted" title="Dotted">⋯</button>
       <div class="mx-4 opacity-25">/</div>
-      <button id="download" title="download">📥</button>
+      <button id="download" title="Download">📥</button>
     </div>
     <svg id="svg" class="w-full flex-auto z-10" style="touch-action: none"></svg>
     <pre class="font-mono fixed left-8 bottom-6 opacity-35 pointer-events-none">

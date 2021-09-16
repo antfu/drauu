@@ -4,4 +4,9 @@ button {
   &.active {
     @apply bg-gray-100 rounded;
   }
+
+  &:focus {
+    @apply bg-gray-200;
+  }
+
 }

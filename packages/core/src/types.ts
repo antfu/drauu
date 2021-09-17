@@ -83,6 +83,14 @@ export interface Options {
    * @default 1
    */
   coordinateScale?: number
+
+  /**
+   * Apply SVG CTM transform when calculating the coordinates.
+   *
+   * @advanced you don't commonly need this
+   * @default true
+   */
+  coordinateTransform?: boolean
 }
 
 export interface EventsMap {

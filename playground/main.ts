@@ -6,7 +6,7 @@ const drauu = createDrauu({
   el: '#svg',
   brush: {
     color: '#000',
-    size: 4,
+    size: 3,
   },
   // acceptsInputTypes: ['pen'],
 })

@@ -64,9 +64,8 @@ export class Drauu {
       throw new Error('[drauu] target element not found')
     if (this.el.tagName.toLocaleLowerCase() !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
-    if (!this.el.createSVGPoint) {
-      throw new Error('[drauu] SVG element must be create by document.createElementNS(\'http://www.w3.org/2000/sv\', \'svg\')')
-    }
+    if (!this.el.createSVGPoint)
+      throw new Error('[drauu] SVG element must be create by document.createElementNS(\'http://www.w3.org/2000/svg\', \'svg\')')
 
     this.svgPoint = this.el.createSVGPoint()
 

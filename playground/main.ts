@@ -42,10 +42,10 @@ window.addEventListener('keydown', (e) => {
     drauu.clear()
 
   else if (e.code === 'Equal')
-    drauu.brush.size += 0.5
+    drauu.brush.size = Math.min(10, drauu.brush.size + 0.5)
 
   else if (e.code === 'Minus')
-    drauu.brush.size -= 0.5
+    drauu.brush.size = Math.max(1, drauu.brush.size - 0.5)
 })
 
 document.getElementById('undo')?.addEventListener('click', () => drauu.undo())
@@ -82,7 +82,7 @@ modes.forEach(({ el, brush }) => {
   })
 })
 
-const lines: { el: HTMLElement; value: string | undefined}[] = [
+const lines: { el: HTMLElement; value: string | undefined }[] = [
   { el: document.getElementById('l-solid')!, value: undefined },
   { el: document.getElementById('l-dashed')!, value: '4' },
   { el: document.getElementById('l-dotted')!, value: '1 7' },

@@ -1,5 +1,5 @@
 import 'virtual:windi.css'
-import { createDrauu, Brush } from 'drauu'
+import { createDrauu, Brush, DrawingMode } from 'drauu'
 import './style.css'
 
 const drauu = createDrauu({
@@ -68,6 +68,7 @@ sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
 
 const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
   { el: document.getElementById('m-stylus')!, brush: { mode: 'stylus', arrowEnd: false } },
+  { el: document.getElementById('m-eraser')!, brush: { mode: 'eraseLine', arrowEnd: false } },
   { el: document.getElementById('m-draw')!, brush: { mode: 'draw', arrowEnd: false } },
   { el: document.getElementById('m-line')!, brush: { mode: 'line', arrowEnd: false } },
   { el: document.getElementById('m-arrow')!, brush: { mode: 'line', arrowEnd: true } },
@@ -78,7 +79,8 @@ modes.forEach(({ el, brush }) => {
   el.addEventListener('click', () => {
     modes.forEach(({ el }) => el.classList.remove('active'))
     el.classList.add('active')
-    Object.assign(drauu.brush, brush)
+    drauu.brush.arrowEnd = brush.arrowEnd
+    drauu.mode = brush.mode as DrawingMode
   })
 })
 

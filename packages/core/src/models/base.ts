@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Brush } from '../types'
+import { Point, Brush } from '../types'
 import { Drauu } from '../drauu'
-import { Point } from '../types'
 import { D } from '../utils'
 
 export abstract class BaseModel<T extends SVGElement> {
@@ -10,7 +9,13 @@ export abstract class BaseModel<T extends SVGElement> {
   start: Point = undefined!
   el: T | null = null
 
-  constructor(private drauu: Drauu) {}
+  constructor(protected drauu: Drauu) {}
+
+  onSelected(el: SVGSVGElement | null): void {
+  }
+
+  onUnselected(): void {
+  }
 
   onStart(point: Point): SVGElement | undefined {
     return undefined
@@ -34,6 +39,10 @@ export abstract class BaseModel<T extends SVGElement> {
 
   get altPressed() {
     return this.drauu.altPressed
+  }
+
+  get svgElement() {
+    return this.drauu.el
   }
 
   getMousePosition(event: PointerEvent): Point {

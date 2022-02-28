@@ -36,7 +36,11 @@ export class Drauu {
   }
 
   set mode(v: DrawingMode) {
+    const unselected = this._models[this.mode]
+    unselected.onUnselected()
+
     this.options.brush!.mode = v
+    this.model.onSelected(this.el)
   }
 
   get brush() {
@@ -154,7 +158,7 @@ export class Drauu {
     this.drawing = true
     this._emitter.emit('start')
     this._currentNode = this.model._eventDown(event)
-    if (this._currentNode)
+    if (this._currentNode && this.mode !== 'eraseLine')
       this.el!.appendChild(this._currentNode)
     this._emitter.emit('changed')
   }

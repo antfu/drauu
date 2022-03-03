@@ -27,6 +27,6 @@
     "prepublishOnly": "nr build"
   },
   "dependencies": {
-    "perfect-freehand": "^1.0.4"
+    "perfect-freehand": "^1.0.16"
   }
 }

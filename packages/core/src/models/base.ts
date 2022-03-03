@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Point, Brush } from '../types'
-import { Drauu } from '../drauu'
+import type { Brush, Point } from '../types'
+import type { Drauu } from '../drauu'
 import { D } from '../utils'
 
 export abstract class BaseModel<T extends SVGElement> {

@@ -1,4 +1,4 @@
-import { Point } from '../types'
+import type { Point } from '../types'
 import { D, guid } from '../utils'
 import { createArrowHead } from '../utils/dom'
 import { simplify } from '../utils/simplify'

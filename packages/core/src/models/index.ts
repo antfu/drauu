@@ -1,7 +1,7 @@
-import { Drauu } from '../drauu'
-import { DrawingMode } from '../types'
+import type { Drauu } from '../drauu'
+import type { DrawingMode } from '../types'
 
-import { BaseModel } from './base'
+import type { BaseModel } from './base'
 import { StylusModel } from './stylus'
 import { EllipseModel } from './ellipse'
 import { LineModel } from './line'

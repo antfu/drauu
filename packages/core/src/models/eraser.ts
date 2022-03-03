@@ -1,4 +1,4 @@
-import { Point } from '../types'
+import type { Point } from '../types'
 import { BaseModel } from './base'
 
 export class EraserModel extends BaseModel<SVGRectElement> {

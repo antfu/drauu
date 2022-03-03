@@ -1,5 +1,5 @@
-import getStroke from 'perfect-freehand'
-import { Point } from '../types'
+import { getStroke } from 'perfect-freehand'
+import type { Point } from '../types'
 import { BaseModel } from './base'
 
 export class StylusModel extends BaseModel<SVGPathElement> {

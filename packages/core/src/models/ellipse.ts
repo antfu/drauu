@@ -1,4 +1,4 @@
-import { Point } from '../types'
+import type { Point } from '../types'
 import { numSort, splitNum } from '../utils'
 import { BaseModel } from './base'
 

@@ -1,6 +1,6 @@
 import { createNanoEvents } from 'nanoevents'
 import { createModels } from './models'
-import { Brush, Options, DrawingMode, EventsMap } from './types'
+import type { Brush, DrawingMode, EventsMap, Options } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null

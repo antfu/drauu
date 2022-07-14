@@ -12,6 +12,9 @@ const drauu = createDrauu({
   // acceptsInputTypes: ['pen'],
 })
 
+const sizeEl = document.getElementById('size')! as HTMLInputElement
+sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
+
 window.addEventListener('keydown', (e) => {
   if (e.code === 'KeyZ' && (e.ctrlKey || e.metaKey)) {
     if (e.shiftKey)
@@ -24,29 +27,27 @@ window.addEventListener('keydown', (e) => {
   if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey)
     return
 
-  if (e.code === 'KeyL')
-    drauu.mode = 'line'
+  if (e.code === 'KeyL') { drauu.mode = 'line' }
 
-  else if (e.code === 'KeyD')
-    drauu.mode = 'draw'
+  else if (e.code === 'KeyD') { drauu.mode = 'draw' }
 
-  else if (e.code === 'KeyS')
-    drauu.mode = 'stylus'
+  else if (e.code === 'KeyS') { drauu.mode = 'stylus' }
 
-  else if (e.code === 'KeyR')
-    drauu.mode = 'rectangle'
+  else if (e.code === 'KeyR') { drauu.mode = 'rectangle' }
 
-  else if (e.code === 'KeyE')
-    drauu.mode = 'ellipse'
+  else if (e.code === 'KeyE') { drauu.mode = 'ellipse' }
 
-  else if (e.code === 'KeyC')
-    drauu.clear()
+  else if (e.code === 'KeyC') { drauu.clear() }
 
-  else if (e.code === 'Equal')
+  else if (e.code === 'Equal') {
     drauu.brush.size = Math.min(10, drauu.brush.size + 0.5)
+    sizeEl.value = `${drauu.brush.size}`
+  }
 
-  else if (e.code === 'Minus')
+  else if (e.code === 'Minus') {
     drauu.brush.size = Math.max(1, drauu.brush.size - 0.5)
+    sizeEl.value = `${drauu.brush.size}`
+  }
 })
 
 document.getElementById('undo')?.addEventListener('click', () => drauu.undo())
@@ -63,9 +64,6 @@ document.getElementById('download')?.addEventListener('click', () => {
   elem.click()
   document.body.removeChild(elem)
 })
-
-const sizeEl = document.getElementById('size')! as HTMLInputElement
-sizeEl.addEventListener('input', () => drauu.brush.size = +sizeEl.value)
 
 const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
   { el: document.getElementById('m-stylus')!, brush: { mode: 'stylus', arrowEnd: false } },

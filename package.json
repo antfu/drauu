@@ -4,24 +4,24 @@
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
-    "js:dev": "pnpm run -r --parallel --filter ./packages dev",
-    "js:build": "pnpm run -r --filter ./packages build",
+    "js:dev": "pnpm run -r --parallel --filter=./packages/* dev",
+    "js:build": "pnpm run -r --filter=./packages/* build",
     "dev": "nr play:dev",
     "build": "nr js:build",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.16.1",
-    "@antfu/ni": "^0.13.2",
-    "@types/node": "^17.0.21",
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "bumpp": "^7.1.1",
+    "@antfu/eslint-config": "^0.26.1",
+    "@antfu/ni": "^0.17.2",
+    "@types/node": "^18.7.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "bumpp": "^8.2.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.10.0",
-    "nanoevents": "^6.0.1",
+    "eslint": "^8.22.0",
+    "nanoevents": "^7.0.1",
     "npm-run-all": "^4.1.5",
-    "pnpm": "^6.32.2",
-    "tsup": "^5.11.13",
-    "typescript": "^4.4.3"
+    "pnpm": "^7.9.3",
+    "tsup": "^6.2.2",
+    "typescript": "^4.7.4"
   }
 }

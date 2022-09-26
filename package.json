@@ -8,6 +8,7 @@
     "js:build": "pnpm run -r --filter=./packages/* build",
     "dev": "nr play:dev",
     "build": "nr js:build",
+    "lint": "eslint .",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "devDependencies": {

@@ -74,9 +74,9 @@ export abstract class BaseModel<T extends SVGElement> {
     const el = document.createElementNS('http://www.w3.org/2000/svg', name)
     const brush = overrides
       ? {
-        ...this.brush,
-        ...overrides,
-      }
+          ...this.brush,
+          ...overrides,
+        }
       : this.brush
 
     el.setAttribute('fill', brush.fill ?? 'transparent')

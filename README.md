@@ -27,7 +27,7 @@ npm i drauu
 ```js
 import { createDrauu } from 'drauu'
 
-const drauu = createDrauu({ 
+const drauu = createDrauu({
   el: '#svg',
   brush: {
     mode: 'stylus', // 'line', 'reactangle', 'ellipse'

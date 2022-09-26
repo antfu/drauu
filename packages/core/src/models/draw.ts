@@ -63,7 +63,7 @@ function line(a: Point, b: Point) {
   const lengthX = b.x - a.x
   const lengthY = b.y - a.y
   return {
-    length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+    length: Math.sqrt(lengthX ** 2 + lengthY ** 2),
     angle: Math.atan2(lengthY, lengthX),
   }
 }

@@ -30,13 +30,15 @@ export class EraserModel extends BaseModel<SVGRectElement> {
             }
           }
           else {
-            if (ele.children) calculatePathFragments(ele.children, ele)
+            if (ele.children)
+              calculatePathFragments(ele.children, ele)
           }
         }
       }
     }
 
-    if (el) calculatePathFragments(el.children)
+    if (el)
+      calculatePathFragments(el.children)
   }
 
   onUnselected(): void {
@@ -83,7 +85,8 @@ export class EraserModel extends BaseModel<SVGRectElement> {
       }
     }
 
-    if (erased.length) this.pathFragments = this.pathFragments.filter((v, i) => !erased.includes(i))
+    if (erased.length)
+      this.pathFragments = this.pathFragments.filter((v, i) => !erased.includes(i))
     return erased.length > 0
   }
 
@@ -100,7 +103,8 @@ export class EraserModel extends BaseModel<SVGRectElement> {
     const pt_x_num = (x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)
     const pt_y_num = (x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)
     const btwn = (a: number, b1: number, b2: number): boolean => {
-      if ((a >= b1) && (a <= b2)) return true
+      if ((a >= b1) && (a <= b2))
+        return true
       return (a >= b2) && (a <= b1)
     }
     if (pt_denom === 0) { return false }

@@ -100,7 +100,8 @@ function simplifyDouglasPeucker(points: Point[], sqTolerance: number) {
 
 // both algorithms combined for awesome performance
 export function simplify(points: Point[], tolerance: number, highestQuality = false) {
-  if (points.length <= 2) return points
+  if (points.length <= 2)
+    return points
 
   const sqTolerance = tolerance !== undefined
     ? tolerance * tolerance

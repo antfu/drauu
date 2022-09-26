@@ -30,10 +30,11 @@
   "homepage": "https://github.com/antfu/drauu#readme",
   "scripts": {
     "dev": "nr build --watch",
+    "lint": "eslint .",
     "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve",
     "prepublishOnly": "nr build"
   },
   "dependencies": {
-    "perfect-freehand": "^1.1.0"
+    "perfect-freehand": "^1.2.0"
   }
 }

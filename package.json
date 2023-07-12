@@ -12,17 +12,17 @@
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.27.0",
-    "@antfu/ni": "^0.18.0",
-    "@types/node": "^18.7.21",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
-    "bumpp": "^8.2.1",
+    "@antfu/eslint-config": "^0.39.7",
+    "@antfu/ni": "^0.21.4",
+    "@types/node": "^20.4.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "bumpp": "^9.1.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.24.0",
-    "nanoevents": "^7.0.1",
+    "eslint": "^8.44.0",
+    "nanoevents": "^8.0.0",
     "npm-run-all": "^4.1.5",
-    "pnpm": "^7.12.2",
-    "tsup": "^6.2.3",
-    "typescript": "^4.8.3"
+    "pnpm": "^8.6.7",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6"
   }
 }

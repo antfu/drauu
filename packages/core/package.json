@@ -33,7 +33,7 @@
     "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve",
     "prepublishOnly": "nr build"
   },
-  "dependencies": {
+  "devDependencies": {
     "perfect-freehand": "^1.2.0"
   }
 }

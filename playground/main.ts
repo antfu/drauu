@@ -88,7 +88,6 @@ modes.forEach(({ el, brush }) => {
       }
     }
     else {
-      modes.forEach(({ el }) => el.classList.remove('active'))
       el.classList.add('active')
     }
   })

@@ -8,6 +8,7 @@ import { LineModel } from './line'
 import { RectModel } from './rect'
 import { DrawModel } from './draw'
 import { EraserModel } from './eraser'
+import { TextModel } from './text'
 
 export function createModels(drauu: Drauu): Record<DrawingMode, BaseModel<SVGElement>> {
   return {
@@ -17,5 +18,6 @@ export function createModels(drauu: Drauu): Record<DrawingMode, BaseModel<SVGEle
     rectangle: new RectModel(drauu),
     ellipse: new EllipseModel(drauu),
     eraseLine: new EraserModel(drauu),
+    text: new TextModel(drauu),
   }
 }

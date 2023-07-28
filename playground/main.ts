@@ -73,13 +73,24 @@ const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
   { el: document.getElementById('m-arrow')!, brush: { mode: 'line', arrowEnd: true } },
   { el: document.getElementById('m-rect')!, brush: { mode: 'rectangle', arrowEnd: false } },
   { el: document.getElementById('m-ellipse')!, brush: { mode: 'ellipse', arrowEnd: false } },
+  { el: document.getElementById('m-text')!, brush: { mode: 'text', arrowEnd: false } },
 ]
 modes.forEach(({ el, brush }) => {
   el.addEventListener('click', () => {
-    modes.forEach(({ el }) => el.classList.remove('active'))
-    el.classList.add('active')
     drauu.brush.arrowEnd = brush.arrowEnd
     drauu.mode = brush.mode as DrawingMode
+    modes.forEach(({ el }) => el.classList.remove('active'))
+    if (brush.mode === 'text') {
+      const text = prompt('Enter text')
+      if (text) {
+        el.classList.add('active')
+        drauu.brush.text = text
+      }
+    }
+    else {
+      modes.forEach(({ el }) => el.classList.remove('active'))
+      el.classList.add('active')
+    }
   })
 })
 

@@ -1,10 +1,9 @@
 [build.environment]
-  NPM_FLAGS = "--prefix=/dev/null"
-  NODE_VERSION = "14"
+  NODE_VERSION = "20"
 
 [build]
   publish = "playground/dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run play:build"
+  command = "pnpm run play:build"
 
 [[redirects]]
   from = "/*"

@@ -107,7 +107,9 @@ export class EraserModel extends BaseModel<SVGRectElement> {
         return true
       return (a >= b2) && (a <= b1)
     }
-    if (pt_denom === 0) { return false }
+    if (pt_denom === 0) {
+      return false
+    }
     else {
       const pt = {
         x: pt_x_num / pt_denom,

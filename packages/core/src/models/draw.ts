@@ -5,7 +5,7 @@ import { simplify } from '../utils/simplify'
 import { BaseModel } from './base'
 
 export class DrawModel extends BaseModel<SVGPathElement> {
-  private points: Point[] = []
+  public points: Point[] = []
   private count = 0
   private arrowId: string | undefined
 
@@ -38,7 +38,7 @@ export class DrawModel extends BaseModel<SVGPathElement> {
       this.count = 0
     }
 
-    this.attr('d', toSvgData(this.points))
+    this.attr('d', DrawModel.toSvgData(this.points))
     return true
   }
 
@@ -49,56 +49,56 @@ export class DrawModel extends BaseModel<SVGPathElement> {
     if (!path)
       return false
 
-    path.setAttribute('d', toSvgData(simplify(this.points, 1, true)))
+    path.setAttribute('d', DrawModel.toSvgData(simplify(this.points, 1, true)))
 
     if (!path.getTotalLength())
       return false
 
     return true
   }
-}
 
-// https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
-function line(a: Point, b: Point) {
-  const lengthX = b.x - a.x
-  const lengthY = b.y - a.y
-  return {
-    length: Math.sqrt(lengthX ** 2 + lengthY ** 2),
-    angle: Math.atan2(lengthY, lengthX),
+  // https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
+  static line(a: Point, b: Point) {
+    const lengthX = b.x - a.x
+    const lengthY = b.y - a.y
+    return {
+      length: Math.sqrt(lengthX ** 2 + lengthY ** 2),
+      angle: Math.atan2(lengthY, lengthX),
+    }
   }
-}
 
-function controlPoint(current: Point, previous: Point, next?: Point, reverse?: boolean) {
+  static controlPoint(current: Point, previous: Point, next?: Point, reverse?: boolean) {
   // When 'current' is the first or last point of the array
   // 'previous' or 'next' don't exist.
   // Replace with 'current'
-  const p = previous || current
-  const n = next || current
-  // The smoothing ratio
-  const smoothing = 0.2
-  // Properties of the opposed-line
-  const o = line(p, n)
-  // If is end-control-point, add PI to the angle to go backward
-  const angle = o.angle + (reverse ? Math.PI : 0)
-  const length = o.length * smoothing
-  // The control point position is relative to the current point
-  const x = current.x + Math.cos(angle) * length
-  const y = current.y + Math.sin(angle) * length
-  return { x, y }
-}
+    const p = previous || current
+    const n = next || current
+    // The smoothing ratio
+    const smoothing = 0.2
+    // Properties of the opposed-line
+    const o = DrawModel.line(p, n)
+    // If is end-control-point, add PI to the angle to go backward
+    const angle = o.angle + (reverse ? Math.PI : 0)
+    const length = o.length * smoothing
+    // The control point position is relative to the current point
+    const x = current.x + Math.cos(angle) * length
+    const y = current.y + Math.sin(angle) * length
+    return { x, y }
+  }
 
-function bezierCommand(point: Point, i: number, points: Point[]) {
+  static bezierCommand(point: Point, i: number, points: Point[]) {
   // start control point
-  const cps = controlPoint(points[i - 1], points[i - 2], point)
-  // end control point
-  const cpe = controlPoint(point, points[i - 1], points[i + 1], true)
-  return `C ${cps.x.toFixed(D)},${cps.y.toFixed(D)} ${cpe.x.toFixed(D)},${cpe.y.toFixed(D)} ${point.x.toFixed(D)},${point.y.toFixed(D)}`
-}
+    const cps = DrawModel.controlPoint(points[i - 1], points[i - 2], point)
+    // end control point
+    const cpe = DrawModel.controlPoint(point, points[i - 1], points[i + 1], true)
+    return `C ${cps.x.toFixed(D)},${cps.y.toFixed(D)} ${cpe.x.toFixed(D)},${cpe.y.toFixed(D)} ${point.x.toFixed(D)},${point.y.toFixed(D)}`
+  }
 
-function toSvgData(points: Point[]) {
-  return points.reduce((acc, point, i, a) =>
-    i === 0
-      ? `M ${point.x.toFixed(D)},${point.y.toFixed(D)}`
-      : `${acc} ${bezierCommand(point, i, a)}`
-  , '')
+  static toSvgData(points: Point[]) {
+    return points.reduce((acc, point, i, a) =>
+      i === 0
+        ? `M ${point.x.toFixed(D)},${point.y.toFixed(D)}`
+        : `${acc} ${DrawModel.bezierCommand(point, i, a)}`
+    , '')
+  }
 }

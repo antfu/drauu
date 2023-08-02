@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Brush, Point } from '../types'
 import type { Drauu } from '../drauu'
 import { D } from '../utils'
@@ -11,21 +10,21 @@ export abstract class BaseModel<T extends SVGElement> {
 
   constructor(protected drauu: Drauu) {}
 
-  onSelected(el: SVGSVGElement | null): void {
+  onSelected(_el: SVGSVGElement | null): void {
   }
 
   onUnselected(): void {
   }
 
-  onStart(point: Point): SVGElement | undefined {
+  onStart(_point: Point): SVGElement | undefined {
     return undefined
   }
 
-  onMove(point: Point): boolean {
+  onMove(_point: Point): boolean {
     return false
   }
 
-  onEnd(point: Point): SVGElement | boolean | undefined {
+  onEnd(_point: Point): SVGElement | boolean | undefined {
     return undefined
   }
 

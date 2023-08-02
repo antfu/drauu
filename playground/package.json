@@ -1,13 +1,13 @@
 {
   "private": true,
-  "packageManager": "pnpm@8.6.7",
+  "packageManager": "pnpm@8.6.11",
   "scripts": {
     "dev": "vite --port 3333 --open",
     "build": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^4.4.3",
+    "vite": "^4.4.8",
     "vite-plugin-windicss": "^1.9.0"
   }
 }

@@ -21,9 +21,8 @@ export class RectModel extends BaseModel<SVGRectElement> {
     if (!this.el || !this.start)
       return false
 
-    // eslint-disable-next-line prefer-const
     let [dx, sx] = splitNum(point.x - this.start.x)
-    // eslint-disable-next-line prefer-const
+
     let [dy, sy] = splitNum(point.y - this.start.y)
 
     if (this.shiftPressed) {

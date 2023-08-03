@@ -2,12 +2,16 @@ import 'virtual:windi.css'
 import type { Brush, DrawingMode } from 'drauu'
 import { createDrauu } from 'drauu'
 import './style.css'
+import { TextModel } from './text'
 
 const drauu = createDrauu({
   el: '#svg',
   brush: {
     color: '#000',
     size: 3,
+  },
+  models: {
+    text: TextModel,
   },
   // acceptsInputTypes: ['pen'],
 })
@@ -84,7 +88,7 @@ modes.forEach(({ el, brush }) => {
       const text = prompt('Enter text')
       if (text) {
         el.classList.add('active')
-        drauu.brush.text = text
+        drauu.model.setOptions({ text })
       }
     }
     else {

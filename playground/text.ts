@@ -1,11 +1,22 @@
-import type { Point } from '../types'
-import { BaseModel } from './base'
+import type { Point } from 'drauu'
+import { BaseModel } from 'drauu'
+
+export interface TextBrush {
+  /** text content */
+  text?: string
+  /** font size */
+  fontSize?: number
+  /** font family */
+  fontFamily?: string
+}
 
 export class TextModel extends BaseModel<SVGTextElement> {
+  private text: string | undefined
   private fontSize: number | undefined
+  private fontFamily: string | undefined
 
   override onStart(point: Point) {
-    if (!this.brush.text)
+    if (!this.text)
       return
     this.el = this.createElement('text')
 
@@ -13,9 +24,9 @@ export class TextModel extends BaseModel<SVGTextElement> {
     this.attr('x', point.x)
     this.attr('y', point.y)
     this.attr('font-size', this.fontSize!)
-    this.brush.fontFamily && this.attr('font-family', this.brush.fontFamily)
+    this.fontFamily && this.attr('font-family', this.fontFamily)
     this.attr('fill', this.brush.color)
-    this.el.textContent = this.brush.text
+    this.el.textContent = this.text
 
     return this.el
   }
@@ -48,5 +59,12 @@ export class TextModel extends BaseModel<SVGTextElement> {
     if (!path)
       return false
     return true
+  }
+
+  setOptions(options: TextBrush) {
+    super.setOptions(options)
+    this.text = options.text
+    this.fontSize = options.fontSize
+    this.fontFamily = options.fontFamily
   }
 }

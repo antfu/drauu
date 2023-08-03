@@ -29,20 +29,21 @@ export class EraserModel extends BaseModel<SVGRectElement> {
               })
             }
           }
-          if (ele instanceof SVGTextElement) {
-            const box = ele.getBBox()
-            this.pathFragments.push({
-              x1: box.x,
-              x2: box.x + box.width,
-              y1: box.y,
-              y2: box.y + box.height,
-              segment: 0,
-              element: element || ele,
-            })
-          }
           else {
-            if (ele.children)
+            if (ele.children?.length) {
               calculatePathFragments(ele.children, ele)
+            }
+            else {
+              const box = ele.getBBox()
+              this.pathFragments.push({
+                x1: box.x,
+                x2: box.x + box.width,
+                y1: box.y,
+                y2: box.y + box.height,
+                segment: 0,
+                element: element || ele,
+              })
+            }
           }
         }
       }

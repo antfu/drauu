@@ -1,6 +1,8 @@
 import type { StrokeOptions } from 'perfect-freehand'
+import type { BaseModel } from './models/base'
+import type { Drauu } from './drauu'
 
-export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse' | 'eraseLine' | 'text'
+export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse' | 'eraseLine' | string
 
 export interface Brush {
   /**
@@ -107,6 +109,11 @@ export interface Options {
    * @default true
    */
   coordinateTransform?: boolean
+
+  /**
+   * Models
+   */
+  models?: Record<string, new (drauu: Drauu) => BaseModel<SVGElement>>
 }
 
 export interface EventsMap {

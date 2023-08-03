@@ -21,6 +21,10 @@ export class Drauu {
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
       this.mount(options.el, options.eventTarget)
+    if (options.models) {
+      for (const [name, Model] of Object.entries(options.models))
+        this._models[name] = new Model(this)
+    }
   }
 
   get model() {

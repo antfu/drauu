@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Brush, Point } from '../types'
 import type { Drauu } from '../drauu'
 import { D } from '../utils'
@@ -97,6 +96,9 @@ export abstract class BaseModel<T extends SVGElement> {
   private _setEvent(event: PointerEvent) {
     this.event = event
     this.point = this.getMousePosition(event)
+  }
+
+  setOptions(options: unknown): void {
   }
 
   /**

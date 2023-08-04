@@ -52,22 +52,6 @@ export interface Brush {
    * Options for 'perfect-freehand'
    */
   stylusOptions?: StrokeOptions
-
-  /**
-   * Text content.
-   */
-  text?: string
-
-  /**
-   * Font size of the text.
-   * @default 16
-   */
-  fontSize?: number
-
-  /**
-   * Font family of the text.
-   */
-  fontFamily?: string
 }
 
 export interface Point {

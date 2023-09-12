@@ -11,6 +11,7 @@ export class Drauu {
   drawing = false
 
   private _emitter = createNanoEvents<EventsMap>()
+  private _originalPointerId: number | null = null
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
   private _undoStack: Node[] = []
@@ -156,6 +157,7 @@ export class Drauu {
     if (this._currentNode)
       this.cancel()
     this.drawing = true
+    this._originalPointerId = event.pointerId
     this._emitter.emit('start')
     this._currentNode = this.model._eventDown(event)
     if (this._currentNode && this.mode !== 'eraseLine')
@@ -178,11 +180,12 @@ export class Drauu {
     this.drawing = false
     this._emitter.emit('end')
     this._emitter.emit('changed')
+    this._originalPointerId = null
   }
 
   private acceptsInput(event: PointerEvent) {
-    return !this.options.acceptsInputTypes
-    || this.options.acceptsInputTypes.includes(event.pointerType as any)
+    return (!this.options.acceptsInputTypes || this.options.acceptsInputTypes.includes(event.pointerType as any))
+          && !(this._originalPointerId && this._originalPointerId !== event.pointerId)
   }
 
   private eventKeyboard(event: KeyboardEvent) {

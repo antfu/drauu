@@ -1,6 +1,6 @@
 {
   "private": true,
-  "packageManager": "pnpm@8.7.0",
+  "packageManager": "pnpm@8.7.5",
   "scripts": {
     "dev": "vite --port 3333 --open",
     "build": "cross-env NODE_ENV=production vite build",

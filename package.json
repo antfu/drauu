@@ -1,6 +1,7 @@
 {
   "version": "0.3.5",
   "private": true,
+  "packageManager": "pnpm@8.7.5",
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
@@ -13,15 +14,15 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.41.0",
-    "@antfu/ni": "^0.21.6",
-    "@types/node": "^20.5.7",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@antfu/ni": "^0.21.8",
+    "@types/node": "^20.6.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
     "bumpp": "^9.2.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "nanoevents": "^8.0.0",
     "npm-run-all": "^4.1.5",
-    "pnpm": "^8.7.0",
+    "pnpm": "^8.7.5",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   }

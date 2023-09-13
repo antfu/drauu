@@ -19,3 +19,5 @@ export function createModels(drauu: Drauu): Record<DrawingMode, BaseModel<SVGEle
     eraseLine: new EraserModel(drauu),
   }
 }
+
+export { StylusModel, EllipseModel, LineModel, RectModel, DrawModel, EraserModel }

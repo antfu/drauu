@@ -30,7 +30,7 @@ import { createDrauu } from 'drauu'
 const drauu = createDrauu({
   el: '#svg',
   brush: {
-    mode: 'stylus', // 'line', 'reactangle', 'ellipse'
+    mode: 'stylus', // 'line', 'rectangle', 'ellipse'
     color: 'skyblue',
     size: 5,
   }

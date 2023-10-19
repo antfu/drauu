@@ -4,6 +4,7 @@ import { BaseModel } from './base'
 export class EraserModel extends BaseModel<SVGRectElement> {
   svgPointPrevious?: DOMPoint
   svgPointCurrent?: DOMPoint
+  removedElements: SVGElement[] = []
 
   pathSubFactor = 20
   pathFragments: { x1: number; x2: number; y1: number; y2: number; segment: number; element: any }[] = []
@@ -79,6 +80,7 @@ export class EraserModel extends BaseModel<SVGRectElement> {
           y2: this.svgPointCurrent!.y,
         }
         if (this.lineLineIntersect(segment, line)) {
+          this.removedElements.push(segment.element)
           segment.element.remove()
           erased.push(i)
         }

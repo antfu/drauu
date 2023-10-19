@@ -1,6 +1,14 @@
 import { createNanoEvents } from 'nanoevents'
-import { createModels } from './models'
+import { EraserModel, createModels } from './models'
 import type { Brush, DrawingMode, EventsMap, Options } from './types'
+
+type UndoRedoAction = {
+  type: 'draw'
+  el: SVGElement
+} | {
+  type: 'erase'
+  elements: SVGElement[]
+}
 
 export class Drauu {
   el: SVGSVGElement | null = null
@@ -14,7 +22,8 @@ export class Drauu {
   private _originalPointerId: number | null = null
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
-  private _undoStack: Node[] = []
+  private _undoableActions: UndoRedoAction[] = []
+  private _redoableActions: UndoRedoAction[] = []
   private _disposables: (() => void)[] = []
 
   constructor(public options: Options = {}) {
@@ -113,29 +122,41 @@ export class Drauu {
   }
 
   undo() {
-    const el = this.el!
-    if (!el.lastElementChild)
-      return false
-    this._undoStack.push(el.lastElementChild.cloneNode(true))
-    el.lastElementChild.remove()
+    if (!this._undoableActions.length)
+      return
+
+    const action = this._undoableActions.pop()!
+    if (action.type === 'draw')
+      action.el.remove()
+    else if (action.type === 'erase')
+      this.el!.append(...action.elements)
+
+    this._redoableActions.push(action)
     this._emitter.emit('changed')
     return true
   }
 
   redo() {
-    if (!this._undoStack.length)
-      return false
-    this.el!.appendChild(this._undoStack.pop()!)
+    if (!this._redoableActions.length)
+      return
+
+    const action = this._redoableActions.pop()!
+    if (action.type === 'draw')
+      this.el!.appendChild(action.el)
+    else if (action.type === 'erase')
+      action.elements.forEach(el => el.remove())
+
+    this._undoableActions.push(action)
     this._emitter.emit('changed')
     return true
   }
 
   canRedo() {
-    return !!this._undoStack.length
+    return !!this._undoableActions.length
   }
 
   canUndo() {
-    return !!this.el?.lastElementChild
+    return !!this._redoableActions.length
   }
 
   private eventMove(event: PointerEvent) {
@@ -201,14 +222,21 @@ export class Drauu {
   }
 
   private commit() {
-    this._undoStack.length = 0
+    if (this.model instanceof EraserModel) {
+      this._undoableActions.push({ type: 'erase', elements: this.model.removedElements })
+      this.model.removedElements = []
+    }
+    else {
+      this._undoableActions.push({ type: 'draw', el: this._currentNode! })
+    }
     const node = this._currentNode
     this._currentNode = undefined
     this._emitter.emit('committed', node)
   }
 
   clear() {
-    this._undoStack.length = 0
+    this._undoableActions = []
+    this._redoableActions = []
     this.cancel()
     this.el!.innerHTML = ''
     this._emitter.emit('changed')

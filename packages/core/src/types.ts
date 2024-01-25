@@ -91,6 +91,14 @@ export interface Options {
    * @default true
    */
   coordinateTransform?: boolean
+
+  /**
+   * Manual fix transform position when calculating the scaled coordinates.
+   *
+   * @advanced you don't commonly need this
+   * @default { x: 0, y: 0 }
+   */
+  coordinatePosition?: { x: number; y: number }
 }
 
 export interface EventsMap {

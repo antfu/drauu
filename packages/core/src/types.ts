@@ -93,7 +93,7 @@ export interface Options {
   coordinateTransform?: boolean
 
   /**
-   * Set transform origin when calculating the scaled coordinates.
+   * Sets the origin of the transformation when calculating scaled coordinates.
    *
    * @default { x: 0, y: 0 }
    */

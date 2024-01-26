@@ -93,11 +93,11 @@ export interface Options {
   coordinateTransform?: boolean
 
   /**
-   * Sets the origin of the transformation when calculating scaled coordinates.
+   * Sets the offset of the transformation when calculating scaled coordinates.
    *
    * @default { x: 0, y: 0 }
    */
-  coordinateOrigin?: { x: number; y: number }
+  offset?: { x: number; y: number }
 }
 
 export interface EventsMap {

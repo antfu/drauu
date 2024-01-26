@@ -93,7 +93,7 @@ export interface Options {
   coordinateTransform?: boolean
 
   /**
-   * Sets the offset of the transformation when calculating scaled coordinates.
+   * Sets the offset of the transformation when calculating coordinates.
    *
    * @default { x: 0, y: 0 }
    */

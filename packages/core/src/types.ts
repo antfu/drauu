@@ -83,7 +83,7 @@ export interface Options {
    *
    * @default window
    */
-  listenWindow?: Window
+  window?: Window
 
   /**
    * When you apply a scale transform to the svg container,

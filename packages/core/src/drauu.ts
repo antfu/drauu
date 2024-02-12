@@ -21,7 +21,7 @@ export class Drauu {
     if (!this.options.brush)
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
-      this.mount(options.el, options.eventTarget, options.listenWindow)
+      this.mount(options.el, options.eventTarget, options.window)
   }
 
   get model() {

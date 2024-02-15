@@ -1,4 +1,4 @@
-import type { Point } from '../types'
+import type { Operation, Point } from '../types'
 import { BaseModel } from './base'
 
 export class EraserModel extends BaseModel<SVGRectElement> {
@@ -7,6 +7,8 @@ export class EraserModel extends BaseModel<SVGRectElement> {
 
   pathSubFactor = 20
   pathFragments: { x1: number; x2: number; y1: number; y2: number; segment: number; element: any }[] = []
+
+  private _erased: SVGElement[] = []
 
   onSelected(el: SVGSVGElement | null): void {
     const calculatePathFragments = (children: any, element?: any): void => {
@@ -46,14 +48,14 @@ export class EraserModel extends BaseModel<SVGRectElement> {
   }
 
   override onStart(point: Point) {
-    this.svgPointPrevious = this.svgElement!.createSVGPoint()
+    this.svgPointPrevious = this.vdom!.el.createSVGPoint()
     this.svgPointPrevious.x = point.x
     this.svgPointPrevious.y = point.y
     return undefined
   }
 
   override onMove(point: Point) {
-    this.svgPointCurrent = this.svgElement!.createSVGPoint()
+    this.svgPointCurrent = this.vdom!.el.createSVGPoint()
     this.svgPointCurrent.x = point.x
     this.svgPointCurrent.y = point.y
     const erased = this.checkAndEraseElement()
@@ -61,14 +63,18 @@ export class EraserModel extends BaseModel<SVGRectElement> {
     return erased
   }
 
-  override onEnd() {
+  override onEnd(): Operation {
     this.svgPointPrevious = undefined
     this.svgPointCurrent = undefined
-    return true
+    const erased = this._erased
+    this._erased = []
+    return {
+      undo: () => erased.forEach(v => this.vdom!.restore(v)),
+      redo: () => erased.forEach(v => this.vdom!.remove(v)),
+    }
   }
 
   private checkAndEraseElement() {
-    const erased: number[] = []
     if (this.pathFragments.length) {
       for (let i = 0; i < this.pathFragments.length; i++) {
         const segment = this.pathFragments[i]
@@ -79,15 +85,15 @@ export class EraserModel extends BaseModel<SVGRectElement> {
           y2: this.svgPointCurrent!.y,
         }
         if (this.lineLineIntersect(segment, line)) {
-          segment.element.remove()
-          erased.push(i)
+          this.vdom.remove(segment.element)
+          this._erased.push(segment.element)
         }
       }
     }
 
-    if (erased.length)
-      this.pathFragments = this.pathFragments.filter((v, i) => !erased.includes(i))
-    return erased.length > 0
+    if (this._erased.length)
+      this.pathFragments = this.pathFragments.filter(v => !this._erased.includes(v.element))
+    return this._erased.length > 0
   }
 
   private lineLineIntersect(line1: any, line2: any): boolean {

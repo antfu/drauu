@@ -102,3 +102,8 @@ export interface EventsMap {
   mounted: () => void
   unmounted: () => void
 }
+
+export interface Operation {
+  undo(): void
+  redo(): void
+}

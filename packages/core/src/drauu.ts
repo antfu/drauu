@@ -1,9 +1,10 @@
 import { createNanoEvents } from 'nanoevents'
 import { createModels } from './models'
-import type { Brush, DrawingMode, EventsMap, Options } from './types'
+import type { Brush, DrawingMode, EventsMap, Operation, Options } from './types'
+import { VDom } from './utils/dom'
 
 export class Drauu {
-  el: SVGSVGElement | null = null
+  vdom: VDom | null = null
   svgPoint: DOMPoint | null = null
   eventEl: Element | null = null
   shiftPressed = false
@@ -14,7 +15,8 @@ export class Drauu {
   private _originalPointerId: number | null = null
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
-  private _undoStack: Node[] = []
+  private _opStack: Operation[] = []
+  private _opIndex = 0
   private _disposables: (() => void)[] = []
 
   constructor(public options: Options = {}) {
@@ -22,6 +24,10 @@ export class Drauu {
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
       this.mount(options.el, options.eventTarget)
+  }
+
+  get el() {
+    return this.vdom?.el ?? null
   }
 
   get model() {
@@ -63,16 +69,17 @@ export class Drauu {
     if (this.el)
       throw new Error('[drauu] already mounted, unmount previous target first')
 
-    this.el = this.resolveSelector(el)
+    const svg = this.resolveSelector(el)
 
-    if (!this.el)
+    if (!svg)
       throw new Error('[drauu] target element not found')
-    if (this.el.tagName.toLocaleLowerCase() !== 'svg')
+    if (svg.tagName.toLocaleLowerCase() !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
-    if (!this.el.createSVGPoint)
+    if (!svg.createSVGPoint)
       throw new Error('[drauu] SVG element must be create by document.createElementNS(\'http://www.w3.org/2000/svg\', \'svg\')')
 
-    this.svgPoint = this.el.createSVGPoint()
+    this.vdom = new VDom(svg)
+    this.svgPoint = svg.createSVGPoint()
 
     const target: SVGSVGElement = this.resolveSelector(eventEl as any) || this.el!
 
@@ -103,7 +110,7 @@ export class Drauu {
   unmount() {
     this._disposables.forEach(fn => fn())
     this._disposables.length = 0
-    this.el = null
+    this.vdom = null
 
     this._emitter.emit('unmounted')
   }
@@ -113,29 +120,27 @@ export class Drauu {
   }
 
   undo() {
-    const el = this.el!
-    if (!el.lastElementChild)
+    if (!this.canUndo() || this.drawing)
       return false
-    this._undoStack.push(el.lastElementChild.cloneNode(true))
-    el.lastElementChild.remove()
+    this._opStack[--this._opIndex].undo()
     this._emitter.emit('changed')
     return true
   }
 
   redo() {
-    if (!this._undoStack.length)
+    if (!this.canRedo() || this.drawing)
       return false
-    this.el!.appendChild(this._undoStack.pop()!)
+    this._opStack[this._opIndex++].redo()
     this._emitter.emit('changed')
     return true
   }
 
   canRedo() {
-    return !!this._undoStack.length
+    return this._opIndex < this._opStack.length
   }
 
   canUndo() {
-    return !!this.el?.lastElementChild
+    return this._opIndex > 0
   }
 
   private eventMove(event: PointerEvent) {
@@ -169,14 +174,10 @@ export class Drauu {
     if (!this.acceptsInput(event) || !this.drawing)
       return
     const result = this.model._eventUp(event)
-    if (!result) {
+    if (!result)
       this.cancel()
-    }
-    else {
-      if (result instanceof Element && result !== this._currentNode)
-        this._currentNode = result
-      this.commit()
-    }
+    else
+      this.commit(result)
     this.drawing = false
     this._emitter.emit('end')
     this._emitter.emit('changed')
@@ -200,15 +201,19 @@ export class Drauu {
     }
   }
 
-  private commit() {
-    this._undoStack.length = 0
+  private commit(op: Operation) {
+    this._opStack.length = this._opIndex
+    this._opStack.push(op)
+    this._opIndex++
+
     const node = this._currentNode
     this._currentNode = undefined
     this._emitter.emit('committed', node)
   }
 
   clear() {
-    this._undoStack.length = 0
+    this._opStack.length = 0
+    this._opIndex = 0
     this.cancel()
     this.el!.innerHTML = ''
     this._emitter.emit('changed')

@@ -53,6 +53,7 @@ export class EllipseModel extends BaseModel<SVGEllipseElement> {
       return false
     if (!path.getTotalLength())
       return false
-    return true
+
+    return this.vdom.appendOp(path)
   }
 }

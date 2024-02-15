@@ -58,6 +58,7 @@ export class RectModel extends BaseModel<SVGRectElement> {
       return false
     if (!path.getTotalLength())
       return false
-    return true
+
+    return this.vdom.appendOp(path)
   }
 }

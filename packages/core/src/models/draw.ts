@@ -54,7 +54,7 @@ export class DrawModel extends BaseModel<SVGPathElement> {
     if (!path.getTotalLength())
       return false
 
-    return true
+    return this.vdom.appendOp(path)
   }
 
   // https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74

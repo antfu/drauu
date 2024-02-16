@@ -48,14 +48,14 @@ export class EraserModel extends BaseModel<SVGRectElement> {
   }
 
   override onStart(point: Point) {
-    this.svgPointPrevious = this.vdom!.el.createSVGPoint()
+    this.svgPointPrevious = this.svgElement!.createSVGPoint()
     this.svgPointPrevious.x = point.x
     this.svgPointPrevious.y = point.y
     return undefined
   }
 
   override onMove(point: Point) {
-    this.svgPointCurrent = this.vdom!.el.createSVGPoint()
+    this.svgPointCurrent = this.svgElement!.createSVGPoint()
     this.svgPointCurrent.x = point.x
     this.svgPointCurrent.y = point.y
     const erased = this.checkAndEraseElement()
@@ -69,8 +69,8 @@ export class EraserModel extends BaseModel<SVGRectElement> {
     const erased = this._erased
     this._erased = []
     return {
-      undo: () => erased.forEach(v => this.vdom!.restore(v)),
-      redo: () => erased.forEach(v => this.vdom!.remove(v)),
+      undo: () => erased.forEach(v => this.drauu._restoreNode(v)),
+      redo: () => erased.forEach(v => this.drauu._removeNode(v)),
     }
   }
 
@@ -85,7 +85,7 @@ export class EraserModel extends BaseModel<SVGRectElement> {
           y2: this.svgPointCurrent!.y,
         }
         if (this.lineLineIntersect(segment, line)) {
-          this.vdom.remove(segment.element)
+          this.drauu._removeNode(segment.element)
           this._erased.push(segment.element)
         }
       }

@@ -24,7 +24,7 @@ export abstract class BaseModel<T extends SVGElement> {
     return false
   }
 
-  onEnd(_point: Point): Operation | false | undefined {
+  onEnd(_point: Point): Operation | boolean | undefined {
     return undefined
   }
 
@@ -40,8 +40,8 @@ export abstract class BaseModel<T extends SVGElement> {
     return this.drauu.altPressed
   }
 
-  get vdom() {
-    return this.drauu.vdom!
+  get svgElement() {
+    return this.drauu.el
   }
 
   getMousePosition(event: PointerEvent): Point {

@@ -1,10 +1,9 @@
 import { createNanoEvents } from 'nanoevents'
 import { createModels } from './models'
 import type { Brush, DrawingMode, EventsMap, Operation, Options } from './types'
-import { VDom } from './utils/dom'
 
 export class Drauu {
-  vdom: VDom | null = null
+  el: SVGSVGElement | null = null
   svgPoint: DOMPoint | null = null
   eventEl: Element | null = null
   shiftPressed = false
@@ -18,16 +17,13 @@ export class Drauu {
   private _opStack: Operation[] = []
   private _opIndex = 0
   private _disposables: (() => void)[] = []
+  private _elements: (SVGElement | null)[] = []
 
   constructor(public options: Options = {}) {
     if (!this.options.brush)
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
       this.mount(options.el, options.eventTarget)
-  }
-
-  get el() {
-    return this.vdom?.el ?? null
   }
 
   get model() {
@@ -69,17 +65,16 @@ export class Drauu {
     if (this.el)
       throw new Error('[drauu] already mounted, unmount previous target first')
 
-    const svg = this.resolveSelector(el)
+    this.el = this.resolveSelector(el)
 
-    if (!svg)
+    if (!this.el)
       throw new Error('[drauu] target element not found')
-    if (svg.tagName.toLocaleLowerCase() !== 'svg')
+    if (this.el.tagName.toLocaleLowerCase() !== 'svg')
       throw new Error('[drauu] can only mount to a SVG element')
-    if (!svg.createSVGPoint)
+    if (!this.el.createSVGPoint)
       throw new Error('[drauu] SVG element must be create by document.createElementNS(\'http://www.w3.org/2000/svg\', \'svg\')')
 
-    this.vdom = new VDom(svg)
-    this.svgPoint = svg.createSVGPoint()
+    this.svgPoint = this.el.createSVGPoint()
 
     const target: SVGSVGElement = this.resolveSelector(eventEl as any) || this.el!
 
@@ -110,7 +105,8 @@ export class Drauu {
   unmount() {
     this._disposables.forEach(fn => fn())
     this._disposables.length = 0
-    this.vdom = null
+    this._elements.length = 0
+    this.el = null
 
     this._emitter.emit('unmounted')
   }
@@ -174,10 +170,20 @@ export class Drauu {
     if (!this.acceptsInput(event) || !this.drawing)
       return
     const result = this.model._eventUp(event)
-    if (!result)
+    if (!result) {
       this.cancel()
-    else
+    }
+    else if (result === true) {
+      const el = this._currentNode!
+      this._appendNode(el)
+      this.commit({
+        undo: () => this._removeNode(el),
+        redo: () => this._restoreNode(el),
+      })
+    }
+    else {
       this.commit(result)
+    }
     this.drawing = false
     this._emitter.emit('end')
     this._emitter.emit('changed')
@@ -234,6 +240,43 @@ export class Drauu {
   load(svg: string) {
     this.clear()
     this.el!.innerHTML = svg
+  }
+
+  /**
+   * @internal
+   */
+  _appendNode(node: SVGElement) {
+    const last = this._elements.at(-1)
+    if (last)
+      last.after(node)
+    else
+      this.el!.append(node)
+    const index = this._elements.push(node) - 1
+    node.dataset.drauu_index = index.toString()
+  }
+
+  /**
+   * @internal
+   */
+  _removeNode(node: SVGElement) {
+    node.remove()
+    this._elements[+node.dataset.drauu_index!] = null
+  }
+
+  /**
+   * @internal
+   */
+  _restoreNode(node: SVGElement) {
+    const index = +node.dataset.drauu_index!
+    this._elements[index] = node
+    for (let i = index - 1; i >= 0; i--) {
+      const last = this._elements[i]
+      if (last) {
+        last.after(node)
+        return
+      }
+    }
+    this.el!.prepend(node)
   }
 }
 

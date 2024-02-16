@@ -33,8 +33,7 @@ export class StylusModel extends BaseModel<SVGPathElement> {
 
     if (!path)
       return false
-
-    return this.vdom.appendOp(path)
+    return true
   }
 
   getSvgData(points: Point[]) {

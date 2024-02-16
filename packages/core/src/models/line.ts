@@ -72,6 +72,6 @@ export class LineModel extends BaseModel<SVGLineElement> {
     if (path.getTotalLength() < 5)
       return false
 
-    return this.vdom.appendOp(path)
+    return true
   }
 }

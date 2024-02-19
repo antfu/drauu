@@ -1,11 +1,11 @@
-[build.environment]
-  NODE_VERSION = "20"
-
 [build]
-  publish = "playground/dist"
-  command = "pnpm run play:build"
+publish = "playground/dist"
+command = "pnpm run play:build"
+
+[build.environment]
+NODE_VERSION = "20"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200

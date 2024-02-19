@@ -70,7 +70,7 @@ document.getElementById('download')?.addEventListener('click', () => {
   document.body.removeChild(elem)
 })
 
-const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
+const modes: { el: HTMLElement, brush: Partial<Brush> }[] = [
   { el: document.getElementById('m-stylus')!, brush: { mode: 'stylus', arrowEnd: false } },
   { el: document.getElementById('m-eraser')!, brush: { mode: 'eraseLine', arrowEnd: false } },
   { el: document.getElementById('m-draw')!, brush: { mode: 'draw', arrowEnd: false } },
@@ -88,7 +88,7 @@ modes.forEach(({ el, brush }) => {
   })
 })
 
-const lines: { el: HTMLElement; value: string | undefined }[] = [
+const lines: { el: HTMLElement, value: string | undefined }[] = [
   { el: document.getElementById('l-solid')!, value: undefined },
   { el: document.getElementById('l-dashed')!, value: '4' },
   { el: document.getElementById('l-dotted')!, value: '1 7' },

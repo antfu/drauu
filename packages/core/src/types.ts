@@ -105,7 +105,7 @@ export interface Options {
    *
    * @default { x: 0, y: 0 }
    */
-  offset?: { x: number; y: number }
+  offset?: { x: number, y: number }
 }
 
 export interface EventsMap {
@@ -119,6 +119,6 @@ export interface EventsMap {
 }
 
 export interface Operation {
-  undo(): void
-  redo(): void
+  undo: () => void
+  redo: () => void
 }

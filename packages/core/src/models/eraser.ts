@@ -1,12 +1,21 @@
 import type { Operation, Point } from '../types'
 import { BaseModel } from './base'
 
+export interface EraserPathFragment {
+  x1: number
+  x2: number
+  y1: number
+  y2: number
+  segment: number
+  element: any
+}
+
 export class EraserModel extends BaseModel<SVGRectElement> {
   svgPointPrevious?: DOMPoint
   svgPointCurrent?: DOMPoint
 
   pathSubFactor = 20
-  pathFragments: { x1: number; x2: number; y1: number; y2: number; segment: number; element: any }[] = []
+  pathFragments: EraserPathFragment[] = []
 
   private _erased: SVGElement[] = []
 

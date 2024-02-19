@@ -192,7 +192,7 @@ export class Drauu {
 
   private acceptsInput(event: PointerEvent) {
     return (!this.options.acceptsInputTypes || this.options.acceptsInputTypes.includes(event.pointerType as any))
-          && !(this._originalPointerId && this._originalPointerId !== event.pointerId)
+      && !(this._originalPointerId && this._originalPointerId !== event.pointerId)
   }
 
   private eventKeyboard(event: KeyboardEvent) {

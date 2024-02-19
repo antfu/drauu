@@ -95,10 +95,12 @@ export class DrawModel extends BaseModel<SVGPathElement> {
   }
 
   static toSvgData(points: Point[]) {
-    return points.reduce((acc, point, i, a) =>
-      i === 0
-        ? `M ${point.x.toFixed(D)},${point.y.toFixed(D)}`
-        : `${acc} ${DrawModel.bezierCommand(point, i, a)}`
-    , '')
+    return points.reduce(
+      (acc, point, i, a) =>
+        i === 0
+          ? `M ${point.x.toFixed(D)},${point.y.toFixed(D)}`
+          : `${acc} ${DrawModel.bezierCommand(point, i, a)}`,
+      '',
+    )
   }
 }

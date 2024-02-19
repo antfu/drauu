@@ -10,7 +10,7 @@ SVG-based drawing tool in browser. Built for [Slidev](https://github.com/slidevj
 
 - Vanilla JavaScript - integrate into any framework you like
 - SVG-based - scalable, transparent, and serializable
-- Stylus / Touch pressure support 
+- Stylus / Touch pressure support
 - Headless (unstyled) - style it as you want
 - Undo / Redo stacks
 

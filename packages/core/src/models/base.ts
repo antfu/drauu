@@ -1,4 +1,4 @@
-import type { Brush, Point } from '../types'
+import type { Brush, Operation, Point } from '../types'
 import type { Drauu } from '../drauu'
 import { D } from '../utils'
 
@@ -24,7 +24,7 @@ export abstract class BaseModel<T extends SVGElement> {
     return false
   }
 
-  onEnd(_point: Point): SVGElement | boolean | undefined {
+  onEnd(_point: Point): Operation | boolean | undefined {
     return undefined
   }
 

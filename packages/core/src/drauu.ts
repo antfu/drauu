@@ -1,6 +1,6 @@
 import { createNanoEvents } from 'nanoevents'
 import { createModels } from './models'
-import type { Brush, DrawingMode, EventsMap, Options } from './types'
+import type { Brush, DrawingMode, EventsMap, Operation, Options } from './types'
 
 export class Drauu {
   el: SVGSVGElement | null = null
@@ -14,8 +14,10 @@ export class Drauu {
   private _originalPointerId: number | null = null
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
-  private _undoStack: Node[] = []
+  private _opStack: Operation[] = []
+  private _opIndex = 0
   private _disposables: (() => void)[] = []
+  private _elements: (SVGElement | null)[] = []
 
   constructor(public options: Options = {}) {
     if (!this.options.brush)
@@ -103,6 +105,7 @@ export class Drauu {
   unmount() {
     this._disposables.forEach(fn => fn())
     this._disposables.length = 0
+    this._elements.length = 0
     this.el = null
 
     this._emitter.emit('unmounted')
@@ -113,29 +116,27 @@ export class Drauu {
   }
 
   undo() {
-    const el = this.el!
-    if (!el.lastElementChild)
+    if (!this.canUndo() || this.drawing)
       return false
-    this._undoStack.push(el.lastElementChild.cloneNode(true))
-    el.lastElementChild.remove()
+    this._opStack[--this._opIndex].undo()
     this._emitter.emit('changed')
     return true
   }
 
   redo() {
-    if (!this._undoStack.length)
+    if (!this.canRedo() || this.drawing)
       return false
-    this.el!.appendChild(this._undoStack.pop()!)
+    this._opStack[this._opIndex++].redo()
     this._emitter.emit('changed')
     return true
   }
 
   canRedo() {
-    return !!this._undoStack.length
+    return this._opIndex < this._opStack.length
   }
 
   canUndo() {
-    return !!this.el?.lastElementChild
+    return this._opIndex > 0
   }
 
   private eventMove(event: PointerEvent) {
@@ -172,10 +173,16 @@ export class Drauu {
     if (!result) {
       this.cancel()
     }
+    else if (result === true) {
+      const el = this._currentNode!
+      this._appendNode(el)
+      this.commit({
+        undo: () => this._removeNode(el),
+        redo: () => this._restoreNode(el),
+      })
+    }
     else {
-      if (result instanceof Element && result !== this._currentNode)
-        this._currentNode = result
-      this.commit()
+      this.commit(result)
     }
     this.drawing = false
     this._emitter.emit('end')
@@ -200,15 +207,19 @@ export class Drauu {
     }
   }
 
-  private commit() {
-    this._undoStack.length = 0
+  private commit(op: Operation) {
+    this._opStack.length = this._opIndex
+    this._opStack.push(op)
+    this._opIndex++
+
     const node = this._currentNode
     this._currentNode = undefined
     this._emitter.emit('committed', node)
   }
 
   clear() {
-    this._undoStack.length = 0
+    this._opStack.length = 0
+    this._opIndex = 0
     this.cancel()
     this.el!.innerHTML = ''
     this._emitter.emit('changed')
@@ -229,6 +240,43 @@ export class Drauu {
   load(svg: string) {
     this.clear()
     this.el!.innerHTML = svg
+  }
+
+  /**
+   * @internal
+   */
+  _appendNode(node: SVGElement) {
+    const last = this._elements.at(-1)
+    if (last)
+      last.after(node)
+    else
+      this.el!.append(node)
+    const index = this._elements.push(node) - 1
+    node.dataset.drauu_index = index.toString()
+  }
+
+  /**
+   * @internal
+   */
+  _removeNode(node: SVGElement) {
+    node.remove()
+    this._elements[+node.dataset.drauu_index!] = null
+  }
+
+  /**
+   * @internal
+   */
+  _restoreNode(node: SVGElement) {
+    const index = +node.dataset.drauu_index!
+    this._elements[index] = node
+    for (let i = index - 1; i >= 0; i--) {
+      const last = this._elements[i]
+      if (last) {
+        last.after(node)
+        return
+      }
+    }
+    this.el!.prepend(node)
   }
 }
 

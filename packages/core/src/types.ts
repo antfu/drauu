@@ -78,6 +78,14 @@ export interface Options {
   eventTarget?: string | Element
 
   /**
+   * Listen to a different window for mouse events.
+   * Useful when you have an iframe or a popup.
+   *
+   * @default window
+   */
+  window?: Window
+
+  /**
    * When you apply a scale transform to the svg container,
    * set this property to let drauu aware of the currect coordinates.
    * @default 1

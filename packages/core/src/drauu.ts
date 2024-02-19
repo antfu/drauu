@@ -23,7 +23,7 @@ export class Drauu {
     if (!this.options.brush)
       this.options.brush = { color: 'black', size: 3, mode: 'stylus' }
     if (options.el)
-      this.mount(options.el, options.eventTarget)
+      this.mount(options.el, options.eventTarget, options.window)
   }
 
   get model() {
@@ -61,7 +61,7 @@ export class Drauu {
       return selector || null
   }
 
-  mount(el: string | SVGSVGElement, eventEl?: string | Element) {
+  mount(el: string | SVGSVGElement, eventEl?: string | Element, listenWindow: Window = window) {
     if (this.el)
       throw new Error('[drauu] already mounted, unmount previous target first')
 
@@ -84,19 +84,19 @@ export class Drauu {
     const keyboard = this.eventKeyboard.bind(this)
 
     target.addEventListener('pointerdown', start, { passive: false })
-    window.addEventListener('pointermove', move, { passive: false })
-    window.addEventListener('pointerup', end, { passive: false })
-    window.addEventListener('pointercancel', end, { passive: false })
-    window.addEventListener('keydown', keyboard, false)
-    window.addEventListener('keyup', keyboard, false)
+    listenWindow.addEventListener('pointermove', move, { passive: false })
+    listenWindow.addEventListener('pointerup', end, { passive: false })
+    listenWindow.addEventListener('pointercancel', end, { passive: false })
+    listenWindow.addEventListener('keydown', keyboard, false)
+    listenWindow.addEventListener('keyup', keyboard, false)
 
     this._disposables.push(() => {
       target.removeEventListener('pointerdown', start)
-      window.removeEventListener('pointermove', move)
-      window.removeEventListener('pointerup', end)
-      window.removeEventListener('pointercancel', end)
-      window.removeEventListener('keydown', keyboard, false)
-      window.removeEventListener('keyup', keyboard, false)
+      listenWindow.removeEventListener('pointermove', move)
+      listenWindow.removeEventListener('pointerup', end)
+      listenWindow.removeEventListener('pointercancel', end)
+      listenWindow.removeEventListener('keydown', keyboard, false)
+      listenWindow.removeEventListener('keyup', keyboard, false)
     })
 
     this._emitter.emit('mounted')

@@ -99,6 +99,13 @@ export interface Options {
    * @default true
    */
   coordinateTransform?: boolean
+
+  /**
+   * Sets the offset of the transformation when calculating coordinates.
+   *
+   * @default { x: 0, y: 0 }
+   */
+  offset?: { x: number; y: number }
 }
 
 export interface EventsMap {

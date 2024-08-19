@@ -34,6 +34,6 @@
     "prepublishOnly": "nr build"
   },
   "devDependencies": {
-    "perfect-freehand": "^1.2.0"
+    "perfect-freehand": "^1.2.2"
   }
 }

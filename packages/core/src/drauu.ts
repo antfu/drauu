@@ -220,6 +220,7 @@ export class Drauu {
   clear() {
     this._opStack.length = 0
     this._opIndex = 0
+    this._elements = []
     this.cancel()
     this.el!.innerHTML = ''
     this._emitter.emit('changed')

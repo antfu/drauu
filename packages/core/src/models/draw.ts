@@ -51,8 +51,14 @@ export class DrawModel extends BaseModel<SVGPathElement> {
 
     path.setAttribute('d', DrawModel.toSvgData(simplify(this.points, 1, true)))
 
-    if (!path.getTotalLength())
-      return false
+    if (!path.getTotalLength()) {
+      // Draw a point
+      const { x, y } = this.points[0]
+      const r = this.brush.size / 2
+      path.setAttribute('d', `M ${x - r} ${y} a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 ${-r * 2},0`)
+      path.setAttribute('fill', this.brush.color)
+      path.setAttribute('stroke-width', '0')
+    }
 
     return true
   }

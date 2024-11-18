@@ -1,12 +1,12 @@
 import type { Drauu } from '../drauu'
 import type { DrawingMode } from '../types'
 
-import { StylusModel } from './stylus'
+import { DrawModel } from './draw'
 import { EllipseModel } from './ellipse'
+import { EraserModel } from './eraser'
 import { LineModel } from './line'
 import { RectModel } from './rect'
-import { DrawModel } from './draw'
-import { EraserModel } from './eraser'
+import { StylusModel } from './stylus'
 
 export function createModels(drauu: Drauu): Record<DrawingMode, DrawModel | StylusModel | LineModel | RectModel | EllipseModel | EraserModel> {
   return {
@@ -19,4 +19,4 @@ export function createModels(drauu: Drauu): Record<DrawingMode, DrawModel | Styl
   }
 }
 
-export { StylusModel, EllipseModel, LineModel, RectModel, DrawModel, EraserModel }
+export { DrawModel, EllipseModel, EraserModel, LineModel, RectModel, StylusModel }

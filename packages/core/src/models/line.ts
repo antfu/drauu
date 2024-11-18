@@ -73,7 +73,7 @@ export class LineModel extends BaseModel<SVGLineElement> {
       if (path.getTotalLength() < 5)
         return false
     }
-    catch (e) {
+    catch {
       return false
     }
     return true

@@ -1,5 +1,5 @@
-import type { Brush, Operation, Point } from '../types'
 import type { Drauu } from '../drauu'
+import type { Brush, Operation, Point } from '../types'
 import { D } from '../utils'
 
 export abstract class BaseModel<T extends SVGElement> {

@@ -1,5 +1,5 @@
-import * as pf from 'perfect-freehand'
 import type { Brush, Point } from '../types'
+import * as pf from 'perfect-freehand'
 import { BaseModel } from './base'
 
 export class StylusModel extends BaseModel<SVGPathElement> {

@@ -1,6 +1,6 @@
-import 'virtual:windi.css'
 import type { Brush, DrawingMode } from 'drauu'
 import { createDrauu } from 'drauu'
+import 'virtual:windi.css'
 import './style.css'
 
 const drauu = createDrauu({

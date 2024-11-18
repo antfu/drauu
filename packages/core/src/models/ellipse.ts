@@ -55,7 +55,7 @@ export class EllipseModel extends BaseModel<SVGEllipseElement> {
       if (!path.getTotalLength())
         return false
     }
-    catch (e) {
+    catch {
       return false
     }
     return true

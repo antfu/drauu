@@ -1,3 +1,3 @@
 export * from './drauu'
+export { DrawModel, EllipseModel, EraserModel, LineModel, RectModel, StylusModel } from './models'
 export * from './types'
-export { StylusModel, EllipseModel, LineModel, RectModel, DrawModel, EraserModel } from './models'

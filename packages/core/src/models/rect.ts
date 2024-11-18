@@ -56,8 +56,13 @@ export class RectModel extends BaseModel<SVGRectElement> {
 
     if (!path)
       return false
-    if (!path.getTotalLength())
+    try {
+      if (!path.getTotalLength())
+        return false
+    }
+    catch (e) {
       return false
+    }
     return true
   }
 }

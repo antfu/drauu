@@ -87,15 +87,17 @@ export class EraserModel extends BaseModel<SVGRectElement> {
     if (this.pathFragments.length) {
       for (let i = 0; i < this.pathFragments.length; i++) {
         const segment = this.pathFragments[i]
-        const line = {
-          x1: this.svgPointPrevious!.x,
-          x2: this.svgPointCurrent!.x,
-          y1: this.svgPointPrevious!.y,
-          y2: this.svgPointCurrent!.y,
-        }
-        if (this.lineLineIntersect(segment, line)) {
-          this.drauu._removeNode(segment.element)
-          this._erased.push(segment.element)
+        if (this.svgPointPrevious && this.svgPointCurrent) {
+          const line = {
+            x1: this.svgPointPrevious.x,
+            x2: this.svgPointCurrent.x,
+            y1: this.svgPointPrevious.y,
+            y2: this.svgPointCurrent.y,
+          }
+          if (this.lineLineIntersect(segment, line)) {
+            this.drauu._removeNode(segment.element)
+            this._erased.push(segment.element)
+          }
         }
       }
     }

@@ -174,12 +174,14 @@ export class Drauu {
       this.cancel()
     }
     else if (result === true) {
-      const el = this._currentNode!
-      this._appendNode(el)
-      this.commit({
-        undo: () => this._removeNode(el),
-        redo: () => this._restoreNode(el),
-      })
+      const el = this._currentNode
+      if (el) {
+        this._appendNode(el)
+        this.commit({
+          undo: () => this._removeNode(el),
+          redo: () => this._restoreNode(el),
+        })
+      }
     }
     else {
       this.commit(result)

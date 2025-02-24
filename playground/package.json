@@ -2,11 +2,11 @@
   "private": true,
   "scripts": {
     "dev": "vite --port 3333 --open",
-    "build": "cross-env NODE_ENV=production vite build",
+    "build": "NODE_ENV=production vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.4.11",
-    "vite-plugin-windicss": "^1.9.3"
+    "vite": "^6.1.1",
+    "vite-plugin-windicss": "^1.9.4"
   }
 }

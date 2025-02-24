@@ -101,6 +101,13 @@ export interface Options {
   coordinateTransform?: boolean
 
   /**
+   * To calculate the correct touch and mouse event positions for
+   * elements using the zoom property on older Chrome versions(before 96)
+   * @default 1
+   */
+  cssZoom?: number
+
+  /**
    * Sets the offset of the transformation when calculating coordinates.
    *
    * @default { x: 0, y: 0 }

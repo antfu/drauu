@@ -82,6 +82,7 @@ export class Drauu {
     const move = this.eventMove.bind(this)
     const end = this.eventEnd.bind(this)
     const keyboard = this.eventKeyboard.bind(this)
+    const touchMove = this.touchMove.bind(this)
 
     target.addEventListener('pointerdown', start, { passive: false })
     listenWindow.addEventListener('pointermove', move, { passive: false })
@@ -89,6 +90,7 @@ export class Drauu {
     listenWindow.addEventListener('pointercancel', end, { passive: false })
     listenWindow.addEventListener('keydown', keyboard, false)
     listenWindow.addEventListener('keyup', keyboard, false)
+    listenWindow.addEventListener('touchmove', touchMove, { passive: false })
 
     this._disposables.push(() => {
       target.removeEventListener('pointerdown', start)
@@ -97,6 +99,7 @@ export class Drauu {
       listenWindow.removeEventListener('pointercancel', end)
       listenWindow.removeEventListener('keydown', keyboard, false)
       listenWindow.removeEventListener('keyup', keyboard, false)
+      listenWindow.removeEventListener('touchmove', touchMove)
     })
 
     this._emitter.emit('mounted')
@@ -190,6 +193,17 @@ export class Drauu {
     this._emitter.emit('end')
     this._emitter.emit('changed')
     this._originalPointerId = null
+  }
+
+  private touchMove(event: TouchEvent) {
+    const touches = Array.from(event.touches)
+    /**
+     * If you use an apple pencil on iPadOS and have "Scribble" enabled, you need to cancel the move event,
+     * otherwise drauu will only register every second stroke.
+     */
+    if (touches.some(touch => touch.touchType === 'stylus' && touch.identifier === this._originalPointerId)) {
+      event.preventDefault()
+    }
   }
 
   private acceptsInput(event: PointerEvent) {

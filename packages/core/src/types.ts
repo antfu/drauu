@@ -129,3 +129,12 @@ export interface Operation {
   undo: () => void
   redo: () => void
 }
+
+declare global {
+  interface Touch {
+    /**
+     * Non standard property, currently only supported in Safari on iOS/iPadOS and macOS.
+     */
+    touchType?: 'direct' | 'stylus'
+  }
+}

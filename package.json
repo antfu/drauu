@@ -2,7 +2,7 @@
   "type": "module",
   "version": "0.4.3",
   "private": true,
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.28.0",
   "scripts": {
     "play:dev": "pnpm -C playground run dev",
     "play:build": "pnpm -C playground run build",
@@ -14,14 +14,14 @@
     "release": "bumpp package.json 'packages/*/package.json' && pnpm -r publish --access public"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.3.0",
-    "@antfu/ni": "^23.3.1",
-    "@types/node": "^22.13.5",
-    "bumpp": "^10.0.3",
-    "eslint": "^9.21.0",
+    "@antfu/eslint-config": "^6.7.3",
+    "@antfu/ni": "^28.1.0",
+    "@types/node": "^25.0.7",
+    "bumpp": "^10.3.2",
+    "eslint": "^9.39.2",
     "nanoevents": "^9.1.0",
-    "pnpm": "^10.4.1",
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.3"
+    "pnpm": "^10.28.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,5 +1,7 @@
+ignoreWorkspaceRootCheck: true
+shamefullyHoist: true
 shellEmulator: true
-
+noGitChecks: true
 trustPolicy: no-downgrade
 
 packages:

@@ -1,5 +1,6 @@
 {
   "name": "drauu",
+  "type": "module",
   "version": "0.4.3",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -14,24 +15,18 @@
   },
   "keywords": [],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "unpkg": "dist/index.global.js",
-  "jsdelivr": "dist/index.global.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "nr tsup --watch",
-    "tsup": "tsup src/index.ts --format esm,cjs --dts --no-splitting --clean",
-    "build": "nr tsup && cp ../core/dist/index.global.js dist",
+    "dev": "tsdown --watch",
+    "build": "tsdown",
     "prepublishOnly": "nr build"
   },
   "dependencies": {
